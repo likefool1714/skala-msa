@@ -8,13 +8,13 @@ export const enrollmentApi = {
     return api.get('/api/enrollments/carrier/my')
   },
   acceptRequest(enrollmentId) {
-    return api.patch(`/api/enrollments/${enrollmentId}/accept`)
+    return api.post(`/api/enrollments/${enrollmentId}/accept`)
   },
   rejectRequest(enrollmentId) {
-    return api.patch(`/api/enrollments/${enrollmentId}/reject`)
+    return api.post(`/api/enrollments/${enrollmentId}/reject`)
   },
   completeRequest(enrollmentId) {
-    return api.patch(`/api/enrollments/${enrollmentId}/complete`)
+    return api.post(`/api/enrollments/${enrollmentId}/complete`)
   },
   reserve(reservation) {
     return api.post('/api/enrollments', reservation)

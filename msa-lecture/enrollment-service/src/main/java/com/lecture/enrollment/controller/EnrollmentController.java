@@ -57,9 +57,9 @@ public class EnrollmentController {
     }
 
     /**
-     * PATCH /enrollments/{id}/accept - 수거업체가 접수 수락
+     * POST /enrollments/{id}/accept - 수거업체가 접수 수락
      */
-    @PatchMapping("/{id}/accept")
+    @PostMapping("/{id}/accept")
     public ResponseEntity<EnrollmentDto.ApiResponse<EnrollmentDto.EnrollmentResponse>> acceptRequest(
             @PathVariable Long id,
             @RequestHeader("X-User-Id") Long carrierId) {
@@ -69,9 +69,9 @@ public class EnrollmentController {
     }
 
     /**
-     * PATCH /enrollments/{id}/reject - 수거업체가 접수 거절
+     * POST /enrollments/{id}/reject - 수거업체가 접수 거절
      */
-    @PatchMapping("/{id}/reject")
+    @PostMapping("/{id}/reject")
     public ResponseEntity<EnrollmentDto.ApiResponse<EnrollmentDto.EnrollmentResponse>> rejectRequest(
             @PathVariable Long id,
             @RequestHeader("X-User-Id") Long carrierId) {
@@ -81,9 +81,9 @@ public class EnrollmentController {
     }
 
     /**
-     * PATCH /enrollments/{id}/complete - 수거업체가 수거 완료 처리
+     * POST /enrollments/{id}/complete - 수거업체가 수거 완료 처리
      */
-    @PatchMapping("/{id}/complete")
+    @PostMapping("/{id}/complete")
     public ResponseEntity<EnrollmentDto.ApiResponse<EnrollmentDto.EnrollmentResponse>> completeRequest(
             @PathVariable Long id,
             @RequestHeader("X-User-Id") Long carrierId) {

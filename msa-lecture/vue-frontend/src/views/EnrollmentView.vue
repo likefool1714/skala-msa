@@ -60,10 +60,10 @@
               <span
                 :class="[
                   'status-badge',
-                  item.status === 'CONFIRMED' ? 'status-active' : 'status-pending'
+                  getStatusClass(item.status)
                 ]"
               >
-                {{ item.status === 'CONFIRMED' ? '수거 접수 확정' : '결제 처리 중' }}
+                {{ getStatusLabel(item.status) }}
               </span>
               <router-link :to="`/courses/${item.collectionServiceId}`" class="btn btn-ghost btn-sm">
                 서비스 보기
@@ -111,6 +111,27 @@ function getThumbBg(cat) {
 
 function getBadge(cat) {
   return categoryConfig[cat]?.badge || 'badge-gray'
+}
+
+function getStatusLabel(status) {
+  return ({
+    PENDING: '결제 처리 중',
+    CONFIRMED: '업체 확인 대기',
+    ACCEPTED: '수거 예정',
+    COMPLETED: '수거 완료',
+    REJECTED: '업체 거절',
+    CANCELLED: '신청 취소'
+  })[status] || status || '상태 미확인'
+}
+
+function getStatusClass(status) {
+  return ({
+    CONFIRMED: 'status-waiting',
+    ACCEPTED: 'status-accepted',
+    COMPLETED: 'status-completed',
+    REJECTED: 'status-rejected',
+    CANCELLED: 'status-rejected'
+  })[status] || 'status-pending'
 }
 
 function getThumbSrc(course) {
@@ -335,6 +356,11 @@ onMounted(async () => {
   background: #FAEEDA;
   color: #854F0B;
 }
+
+.status-waiting { background: #FAEEDA; color: #854F0B; }
+.status-accepted { background: #E8F1FF; color: #2563EB; }
+.status-completed { background: #E1F5EE; color: #0F6E56; }
+.status-rejected { background: #FFF1F2; color: #BE123C; }
 
 .btn-sm {
   padding: 7px 14px;

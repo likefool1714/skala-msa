@@ -102,7 +102,7 @@ const auth = useAuthStore()
 
 const enrolling = ref(false)
 const enrollError = ref('')
-const enrollmentStatus = ref('NONE') // NONE | PENDING | CONFIRMED
+const enrollmentStatus = ref('NONE') // NONE | PENDING | CONFIRMED | ACCEPTED | COMPLETED | REJECTED | CANCELLED
 const minDate = new Date().toISOString().slice(0, 10)
 const reservation = reactive({ preferredCollectionDate: '', preferredStartTime: '', preferredEndTime: '', wasteInformation: '', collectionRequirements: '' })
 
@@ -160,8 +160,12 @@ const thumbSrc = computed(() => {
 
 const buttonLabel = computed(() => {
   if (isInstructor.value) return '수집·운반 업체는 신청 불가'
-  if (enrollmentStatus.value === 'CONFIRMED') return '수거 신청 관리로 이동'
   if (enrollmentStatus.value === 'PENDING') return '수거 신청 · 결제 처리 중'
+  if (enrollmentStatus.value === 'CONFIRMED') return '업체 확인 대기 · 신청 관리'
+  if (enrollmentStatus.value === 'ACCEPTED') return '수거 예정 · 신청 관리'
+  if (enrollmentStatus.value === 'COMPLETED') return '수거 완료 · 신청 내역 보기'
+  if (enrollmentStatus.value === 'REJECTED') return '업체 거절 · 신청 내역 보기'
+  if (enrollmentStatus.value === 'CANCELLED') return '취소된 신청 내역 보기'
   return '비용 결제하고 수거 신청'
 })
 
@@ -178,7 +182,23 @@ const helperText = computed(() => {
   }
 
   if (enrollmentStatus.value === 'CONFIRMED') {
-    return '결제가 완료되어 수거 접수가 확정되었습니다.'
+    return '결제가 완료되어 수거업체의 확인을 기다리고 있습니다.'
+  }
+
+  if (enrollmentStatus.value === 'ACCEPTED') {
+    return '수거업체가 신청을 수락했습니다. 희망 수거일에 수거가 예정되어 있습니다.'
+  }
+
+  if (enrollmentStatus.value === 'COMPLETED') {
+    return '해당 신청의 의료폐기물 수거가 완료되었습니다.'
+  }
+
+  if (enrollmentStatus.value === 'REJECTED') {
+    return '수거업체가 해당 신청을 거절했습니다. 신청 관리에서 상태를 확인해 주세요.'
+  }
+
+  if (enrollmentStatus.value === 'CANCELLED') {
+    return '취소된 수거 신청입니다.'
   }
 
   if (enrollmentStatus.value === 'PENDING') {
@@ -211,7 +231,8 @@ async function loadEnrollmentStatus() {
       return
     }
 
-    enrollmentStatus.value = matched.status === 'CONFIRMED' ? 'CONFIRMED' : 'PENDING'
+    const supportedStatuses = ['PENDING', 'CONFIRMED', 'ACCEPTED', 'COMPLETED', 'REJECTED', 'CANCELLED']
+    enrollmentStatus.value = supportedStatuses.includes(matched.status) ? matched.status : 'NONE'
   } catch (e) {
     console.error('[CourseDetail] failed to load enrollment status:', e)
     enrollmentStatus.value = 'NONE'
@@ -231,7 +252,7 @@ async function handlePrimaryAction() {
     return
   }
 
-  if (enrollmentStatus.value === 'CONFIRMED') {
+  if (['CONFIRMED', 'ACCEPTED', 'COMPLETED', 'REJECTED', 'CANCELLED'].includes(enrollmentStatus.value)) {
     router.push('/enrollments')
     return
   }
