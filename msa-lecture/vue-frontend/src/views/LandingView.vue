@@ -2,353 +2,455 @@
   <div class="landing">
     <AppHeader />
 
-    <!-- 히어로 섹션 -->
-    <section class="hero">
-      <div class="hero-inner">
-        <div class="hero-content fade-in-up">
-          <span class="hero-badge">의료폐기물 수거 업무를 한 곳에서</span>
-          <h1 class="hero-title">수거 신청부터 기록까지,<br><em>MediWaste Hub</em></h1>
-          <p class="hero-desc">병·의원 등 배출 사업장과 수집·운반 업체를 연결하여 수거 서비스 신청, 결제와 접수 상태를 통합 관리합니다.</p>
-          <div class="hero-actions">
-            <router-link to="/courses" class="btn btn-primary btn-lg">수거 서비스 찾기</router-link>
-            <router-link to="/login" class="btn btn-outline btn-lg">기업 계정 시작하기</router-link>
-          </div>
-          <div class="hero-stats">
-            <div class="stat"><span class="stat-num">통합</span><span class="stat-label">수거 신청 관리</span></div>
-            <div class="stat"><span class="stat-num">추적</span><span class="stat-label">접수 상태 확인</span></div>
-            <div class="stat"><span class="stat-num">연결</span><span class="stat-label">배출처·수거업체</span></div>
-          </div>
-        </div>
-        <div class="hero-visual fade-in" aria-label="의료폐기물 수거 관리 일러스트">
-          <div class="pet-scene">
-            <span class="scene-heart">✚</span>
-            <span class="scene-paw paw-one">♻️</span>
-            <span class="scene-paw paw-two">✓</span>
-            <div class="pet-bubble dog">🏥</div>
-            <div class="pet-bubble cat">🚚</div>
-            <div class="sitter-card"><span>✓</span> 수거 접수 상태 확인</div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- 인기 강의 -->
-    <section class="popular-section">
-      <div class="section-inner">
-        <div class="section-header">
-          <h2 class="section-title">의료폐기물 수거 서비스</h2>
-          <router-link to="/login" class="section-link">전체 보기 →</router-link>
-        </div>
-        <div class="course-grid">
-          <div v-for="course in featuredCourses" :key="course.id" class="course-card-landing">
-            <div class="card-thumb" :class="course.thumbBg">
-              <span class="care-emoji">{{ course.emoji }}</span>
-              <span class="available-label">수거 신청 가능</span>
+    <main>
+      <section class="hero">
+        <div class="hero-inner">
+          <div class="hero-copy fade-in-up">
+            <span class="eyebrow"><i></i> MEDICAL WASTE WORKSPACE</span>
+            <h1>의료폐기물 수거 업무를<br><em>하나의 흐름</em>으로 관리하세요.</h1>
+            <p>
+              배출 사업장과 수집·운반 업체를 연결하고, 서비스 선택부터
+              수거 접수 확정까지 필요한 기록을 한곳에 모읍니다.
+            </p>
+            <div class="hero-actions">
+              <router-link :to="primaryAction.to" class="btn hero-primary">
+                {{ primaryAction.label }} <span aria-hidden="true">→</span>
+              </router-link>
+              <router-link :to="secondaryAction.to" class="btn hero-secondary">
+                {{ secondaryAction.label }}
+              </router-link>
             </div>
-            <div class="card-body">
-              <span class="badge" :class="course.badgeClass">{{ course.category }}</span>
-              <h3 class="card-title">{{ course.title }}</h3>
-              <div class="card-meta">
-                <span class="instructor">{{ course.instructor }}</span>
-                <span class="price">{{ course.price }}</span>
+            <div class="trust-note">
+              <span>✓</span>
+              공식 신고 시스템을 대체하지 않는 수거 업무 지원 서비스입니다.
+            </div>
+          </div>
+
+          <div class="workflow-panel fade-in" aria-label="수거 업무 진행 예시">
+            <div class="panel-header">
+              <div>
+                <span class="panel-kicker">TODAY'S WORKFLOW</span>
+                <strong>수거 접수 현황</strong>
               </div>
+              <span class="live-badge"><i></i> 운영 중</span>
+            </div>
+
+            <div class="status-card status-main">
+              <div class="status-icon">01</div>
+              <div>
+                <span>수거 서비스 선택</span>
+                <strong>폐기물 유형과 조건 확인</strong>
+              </div>
+              <span class="status-check">✓</span>
+            </div>
+            <div class="status-card">
+              <div class="status-icon">02</div>
+              <div>
+                <span>희망 일정 입력</span>
+                <strong>수거 날짜와 요청사항 접수</strong>
+              </div>
+              <span class="status-state">진행</span>
+            </div>
+            <div class="status-card muted">
+              <div class="status-icon">03</div>
+              <div>
+                <span>결제 및 접수 확정</span>
+                <strong>처리 상태 자동 기록</strong>
+              </div>
+              <span class="status-state">대기</span>
+            </div>
+
+            <div class="panel-summary">
+              <div><strong>통합</strong><span>수거 신청 관리</span></div>
+              <div><strong>추적</strong><span>진행 상태 확인</span></div>
+              <div><strong>연결</strong><span>사업장·운반 업체</span></div>
             </div>
           </div>
         </div>
-      </div>
-    </section>
+      </section>
 
-    <!-- 특징 섹션 -->
-    <section class="features-section">
-      <div class="section-inner">
-        <h2 class="section-title center">반복적인 수거 업무를 더 명확하게</h2>
-        <div class="features-grid">
-          <div v-for="f in features" :key="f.title" class="feature-card">
-            <div class="feature-icon">{{ f.icon }}</div>
-            <h3 class="feature-title">{{ f.title }}</h3>
-            <p class="feature-desc">{{ f.desc }}</p>
+      <section class="process-section">
+        <div class="section-inner">
+          <div class="section-intro">
+            <span class="section-kicker">COLLECTION PROCESS</span>
+            <h2>신청부터 접수 확정까지</h2>
+            <p>각 서비스가 분리되어 있어도 사용자는 하나의 연결된 업무 흐름으로 이용합니다.</p>
+          </div>
+          <div class="process-list">
+            <article v-for="(step, index) in processSteps" :key="step.title" class="process-item">
+              <div class="process-number">0{{ index + 1 }}</div>
+              <div class="process-icon">{{ step.icon }}</div>
+              <h3>{{ step.title }}</h3>
+              <p>{{ step.desc }}</p>
+              <span v-if="index < processSteps.length - 1" class="process-arrow" aria-hidden="true">→</span>
+            </article>
           </div>
         </div>
-      </div>
-    </section>
+      </section>
 
-    <!-- CTA -->
-    <section class="cta-section">
-      <div class="cta-inner">
-        <h2>지금 바로 시작하세요</h2>
-        <p>공식 신고 시스템을 대체하지 않고, 수거 신청과 업무 기록 관리를 지원합니다.</p>
-        <router-link to="/login" class="btn btn-primary btn-lg">무료로 시작하기</router-link>
-      </div>
-    </section>
+      <section class="services-section">
+        <div class="section-inner">
+          <div class="section-heading-row">
+            <div>
+              <span class="section-kicker">ACTIVE SERVICES</span>
+              <h2>현재 이용 가능한 수거 서비스</h2>
+              <p>수집·운반 업체가 실제로 등록한 서비스 중 접수가 많은 항목입니다.</p>
+            </div>
+            <router-link :to="servicesLink" class="text-link">전체 서비스 보기 <span>→</span></router-link>
+          </div>
 
-    <!-- 푸터 -->
+          <div v-if="courseStore.loading" class="service-list" aria-label="서비스를 불러오는 중">
+            <div v-for="i in 3" :key="i" class="service-row skeleton-row">
+              <span class="skeleton-block skeleton-icon"></span>
+              <span class="skeleton-block skeleton-copy"></span>
+              <span class="skeleton-block skeleton-price"></span>
+            </div>
+          </div>
+
+          <div v-else-if="courseStore.error" class="service-empty">
+            <span class="empty-icon">!</span>
+            <div>
+              <h3>서비스 목록을 불러오지 못했습니다.</h3>
+              <p>잠시 후 다시 확인해 주세요. 다른 메뉴는 정상적으로 이용할 수 있습니다.</p>
+            </div>
+            <button class="btn retry-button" @click="courseStore.fetchCourses()">다시 불러오기</button>
+          </div>
+
+          <div v-else-if="featuredCourses.length" class="service-list">
+            <router-link
+              v-for="course in featuredCourses"
+              :key="course.id"
+              :to="courseLink(course.id)"
+              class="service-row"
+            >
+              <div class="service-symbol" :class="wasteConfig(course.wasteType).className">
+                {{ wasteConfig(course.wasteType).icon }}
+              </div>
+              <div class="service-copy">
+                <span class="service-type">{{ wasteConfig(course.wasteType).label }}</span>
+                <h3>{{ course.name }}</h3>
+                <p>{{ course.carrierName || '수집·운반 업체' }}</p>
+              </div>
+              <div class="request-count">
+                <span>누적 접수</span>
+                <strong>{{ Number(course.requestCount || 0).toLocaleString() }}건</strong>
+              </div>
+              <div class="service-price">
+                <span>서비스 비용</span>
+                <strong>₩{{ Number(course.price || 0).toLocaleString() }}</strong>
+              </div>
+              <span class="row-arrow" aria-hidden="true">→</span>
+            </router-link>
+          </div>
+
+          <div v-else class="service-empty">
+            <span class="empty-icon">＋</span>
+            <div>
+              <h3>아직 등록된 수거 서비스가 없습니다.</h3>
+              <p>수집·운반 업체 계정으로 첫 서비스를 등록해 보세요.</p>
+            </div>
+            <router-link :to="emptyAction.to" class="btn retry-button">{{ emptyAction.label }}</router-link>
+          </div>
+        </div>
+      </section>
+
+      <section class="role-section">
+        <div class="section-inner role-grid">
+          <article class="role-card generator-card">
+            <span class="role-label">배출 사업장</span>
+            <h2>조건에 맞는 서비스를 찾고<br>수거 일정을 신청하세요.</h2>
+            <ul>
+              <li>폐기물 유형별 서비스 비교</li>
+              <li>희망 수거일과 요청사항 접수</li>
+              <li>신청·결제 진행 상태 확인</li>
+            </ul>
+            <router-link :to="auth.isAuthenticated ? '/courses' : '/login'">수거 서비스 확인 →</router-link>
+          </article>
+          <article class="role-card carrier-card">
+            <span class="role-label">수집·운반 업체</span>
+            <h2>제공 가능한 서비스를 등록하고<br>접수 이력을 관리하세요.</h2>
+            <ul>
+              <li>폐기물 유형과 서비스 비용 등록</li>
+              <li>업체 정보 기반 서비스 노출</li>
+              <li>접수 건수와 처리 이력 확인</li>
+            </ul>
+            <router-link :to="carrierAction.to">{{ carrierAction.label }} →</router-link>
+          </article>
+        </div>
+      </section>
+
+      <section class="cta-section">
+        <div class="cta-inner">
+          <span>MEDIWASTE HUB</span>
+          <h2>{{ ctaContent.title }}</h2>
+          <p>{{ ctaContent.desc }}</p>
+          <router-link :to="ctaContent.to" class="btn cta-button">{{ ctaContent.label }} →</router-link>
+        </div>
+      </section>
+    </main>
+
     <footer class="footer">
       <div class="footer-inner">
-        <div class="footer-logo">
-          <span class="footer-symbol">✚</span>
-          <span>MediWaste Hub</span>
-        </div>
-        <p class="footer-copy">© 2026 MediWaste Hub. B2B workflow prototype.</p>
+        <div class="footer-logo"><span>✚</span> MediWaste Hub</div>
+        <p>수거 신청과 업무 기록을 연결하는 B2B workflow prototype</p>
+        <small>© 2026 MediWaste Hub</small>
       </div>
     </footer>
   </div>
 </template>
 
 <script setup>
+import { computed, onMounted } from 'vue'
 import AppHeader from '@/components/AppHeader.vue'
+import { useAuthStore } from '@/store/auth.js'
+import { useCourseStore } from '@/store/course.js'
 
-const featuredCourses = [
-  { id:1, title:'서울권 일반의료폐기물 수거', category:'일반의료폐기물', instructor:'그린메디컬 운반', price:'₩120,000', emoji:'♻️', thumbBg:'thumb-teal', badgeClass:'badge-teal' },
-  { id:2, title:'의원급 손상성폐기물 수거', category:'손상성폐기물', instructor:'세이프웨이스트', price:'₩150,000', emoji:'💉', thumbBg:'thumb-blue', badgeClass:'badge-blue' },
-  { id:3, title:'조직물류폐기물 지정 수거', category:'조직물류폐기물', instructor:'메디클린 운송', price:'₩220,000', emoji:'🧪', thumbBg:'thumb-purple', badgeClass:'badge-purple' },
-  { id:4, title:'경기 남부 정기 수거 서비스', category:'일반의료폐기물', instructor:'에코메디 로지스', price:'₩130,000', emoji:'🚚', thumbBg:'thumb-teal', badgeClass:'badge-teal' },
-  { id:5, title:'치과·의원 전용 수거', category:'손상성폐기물', instructor:'클린패스', price:'₩145,000', emoji:'📦', thumbBg:'thumb-blue', badgeClass:'badge-blue' },
-  { id:6, title:'냉장 운반 조건 수거', category:'조직물류폐기물', instructor:'바이오세이프', price:'₩250,000', emoji:'❄️', thumbBg:'thumb-purple', badgeClass:'badge-purple' },
+const auth = useAuthStore()
+const courseStore = useCourseStore()
+
+const processSteps = [
+  { icon: '⌕', title: '서비스 선택', desc: '폐기물 유형과 수거 조건을 비교합니다.' },
+  { icon: '◷', title: '일정 신청', desc: '희망 수거일과 현장 요청사항을 입력합니다.' },
+  { icon: '₩', title: '비용 결제', desc: '수거 서비스 비용을 결제하고 처리를 요청합니다.' },
+  { icon: '✓', title: '접수 확정', desc: '이벤트가 처리되면 신청 상태가 자동 갱신됩니다.' },
 ]
 
-const features = [
-  { icon:'🏢', title:'기업 간 서비스 연결', desc:'의료폐기물 배출 사업장과 수집·운반 업체를 하나의 업무 흐름으로 연결합니다.' },
-  { icon:'📅', title:'희망 수거일 신청', desc:'폐기물 정보와 희망 수거 시간을 입력해 온라인으로 수거를 신청합니다.' },
-  { icon:'💳', title:'비용 결제와 접수 확정', desc:'결제 완료 이벤트가 처리되면 수거 접수 상태가 자동으로 확정됩니다.' },
-  { icon:'📊', title:'이용 이력 기반 추천', desc:'확정된 수거 이력을 기준으로 관련 수거 서비스를 추천합니다.' },
-]
+const featuredCourses = computed(() => (
+  [...(Array.isArray(courseStore.courses) ? courseStore.courses : [])]
+    .sort((a, b) => Number(b.requestCount || 0) - Number(a.requestCount || 0))
+    .slice(0, 3)
+))
+
+const primaryAction = computed(() => {
+  if (!auth.isAuthenticated) return { to: '/login', label: '기업 계정으로 시작하기' }
+  if (auth.user?.role === 'INSTRUCTOR') return { to: '/courses/new', label: '수거 서비스 등록하기' }
+  return { to: '/courses', label: '수거 서비스 찾기' }
+})
+
+const secondaryAction = computed(() => (
+  auth.isAuthenticated
+    ? { to: '/mypage', label: '내 업무 현황 보기' }
+    : { to: '/login', label: '로그인' }
+))
+
+const servicesLink = computed(() => auth.isAuthenticated ? '/courses' : '/login')
+const emptyAction = computed(() => (
+  auth.user?.role === 'INSTRUCTOR'
+    ? { to: '/courses/new', label: '첫 서비스 등록' }
+    : { to: '/login', label: '업체 계정으로 로그인' }
+))
+const carrierAction = computed(() => (
+  auth.user?.role === 'INSTRUCTOR'
+    ? { to: '/courses/new', label: '수거 서비스 등록' }
+    : { to: '/login', label: '업체 계정 시작' }
+))
+
+const ctaContent = computed(() => {
+  if (!auth.isAuthenticated) return {
+    title: '반복되는 수거 업무, 이제 한곳에서 시작하세요.',
+    desc: '배출 사업장과 수집·운반 업체 모두를 위한 업무 공간입니다.',
+    to: '/login', label: '기업 계정으로 시작하기'
+  }
+  if (auth.user?.role === 'INSTRUCTOR') return {
+    title: '새로운 수거 서비스를 등록해 보세요.',
+    desc: '처리 가능한 폐기물 유형과 서비스 조건을 안내할 수 있습니다.',
+    to: '/courses/new', label: '서비스 등록하기'
+  }
+  return {
+    title: '현장 조건에 맞는 수거 서비스를 찾아보세요.',
+    desc: '폐기물 유형별로 비교하고 희망 수거 일정을 신청할 수 있습니다.',
+    to: '/courses', label: '수거 서비스 찾기'
+  }
+})
+
+function courseLink(id) {
+  return auth.isAuthenticated ? `/courses/${id}` : '/login'
+}
+
+function wasteConfig(wasteType) {
+  const configs = {
+    GENERAL_MEDICAL: { label: '일반의료폐기물', icon: '♻', className: 'teal' },
+    '일반의료폐기물': { label: '일반의료폐기물', icon: '♻', className: 'teal' },
+    SHARPS: { label: '손상성폐기물', icon: '↗', className: 'blue' },
+    '손상성폐기물': { label: '손상성폐기물', icon: '↗', className: 'blue' },
+    PATHOLOGICAL: { label: '조직물류폐기물', icon: '◇', className: 'purple' },
+    '조직물류폐기물': { label: '조직물류폐기물', icon: '◇', className: 'purple' },
+  }
+  return configs[wasteType] || { label: wasteType || '수거 서비스', icon: '○', className: 'gray' }
+}
+
+onMounted(() => {
+  courseStore.fetchCourses()
+})
 </script>
 
 <style scoped>
-.landing { background: var(--color-bg-secondary); }
+.landing { min-height: 100vh; background: #f6f8f8; color: #182c35; }
+.section-inner { width: min(1180px, calc(100% - 48px)); margin: 0 auto; }
+.section-kicker, .panel-kicker { display: block; color: #5e72e4; font-size: 11px; font-weight: 800; letter-spacing: .16em; margin-bottom: 10px; }
 
-/* 히어로 */
-.hero {
-  position: relative;
-  overflow: hidden;
-  background:
-    radial-gradient(circle at 84% 16%, rgba(255,255,255,.22) 0 7%, transparent 7.2%),
-    radial-gradient(circle at 72% 78%, rgba(45,206,137,.20), transparent 18rem),
-    linear-gradient(135deg, #172b4d 0%, #5e72e4 52%, #825ee4 100%);
-  border-bottom: 1px solid var(--color-border);
-  padding: 80px 0 64px;
-}
-.hero-inner {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 24px;
-  display: grid;
-  grid-template-columns: 1.05fr .95fr;
-  gap: 48px;
-  align-items: center;
-}
-.hero-badge {
-  display: inline-block;
-  padding: 5px 14px;
-  background: rgba(255,255,255,.14);
-  color: rgba(255,255,255,.92);
-  border: 1px solid rgba(255,255,255,.18);
-  border-radius: 20px;
-  font-size: 12px;
-  font-weight: 600;
-  margin-bottom: 16px;
-}
-.hero-title {
-  font-size: clamp(38px, 5vw, 58px);
-  font-weight: 800;
-  line-height: 1.25;
-  letter-spacing: -0.5px;
-  color: #fff;
-  margin-bottom: 16px;
-}
-.hero-title em { color: #9cf0cd; font-style: normal; }
-.hero-desc {
-  font-size: 16px;
-  color: rgba(255,255,255,.76);
-  line-height: 1.7;
-  max-width: 460px;
-  margin-bottom: 28px;
-}
-.hero-actions {
-  display: flex;
-  gap: 12px;
-  margin-bottom: 40px;
-}
-.btn-lg { padding: 12px 28px; font-size: 15px; }
-.hero-stats {
-  display: flex;
-  gap: 36px;
-}
-.stat { display: flex; flex-direction: column; gap: 2px; }
-.stat-num { font-size: 22px; font-weight: 700; color: #fff; }
-.stat-label { font-size: 12px; color: rgba(255,255,255,.68); }
-.hero-visual {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-.pet-scene {
-  position: relative;
-  width: min(420px, 38vw);
-  aspect-ratio: 1;
-  border-radius: 34px;
-  background: linear-gradient(145deg, rgba(255,255,255,.22), rgba(255,255,255,.09));
-  border: 1px solid rgba(255,255,255,.26);
-  backdrop-filter: blur(16px);
-  box-shadow: inset 0 0 0 10px rgba(255,255,255,.06), var(--shadow-lg);
-}
-.pet-bubble {
-  position: absolute;
-  display: grid;
-  place-items: center;
-  background: white;
-  border: 5px solid rgba(255,255,255,.75);
-  box-shadow: var(--shadow-md);
-}
-.pet-bubble.dog { width: 170px; height: 170px; left: 44px; top: 84px; border-radius: 45% 55% 50% 50%; font-size: 92px; }
-.pet-bubble.cat { width: 125px; height: 125px; right: 38px; bottom: 62px; border-radius: 50%; font-size: 68px; }
-.scene-heart { position: absolute; right: 54px; top: 42px; color: #9cf0cd; font-size: 42px; transform: rotate(10deg); }
-.scene-paw { position: absolute; opacity: .28; font-size: 30px; }
-.paw-one { left: 34px; bottom: 44px; transform: rotate(-18deg); }
-.paw-two { right: 84px; top: 128px; transform: rotate(22deg); }
-.sitter-card {
-  position: absolute;
-  left: 24px;
-  bottom: 25px;
-  padding: 12px 18px;
-  border-radius: 16px;
-  background: white;
-  box-shadow: var(--shadow-md);
-  color: var(--color-text-primary);
-  font-size: 13px;
-  font-weight: 700;
-}
-.sitter-card span { color: white; background: var(--color-secondary); border-radius: 50%; padding: 2px 6px; margin-right: 6px; }
+.hero { position: relative; overflow: hidden; padding: 88px 0 78px; background: linear-gradient(135deg, #f4f6ff 0%, #eef0ff 58%, #f5f0ff 100%); border-bottom: 1px solid #e1e5f2; }
+.hero::before { content: ''; position: absolute; width: 540px; height: 540px; right: -140px; top: -250px; border: 90px solid rgba(94,114,228,.07); border-radius: 50%; }
+.hero::after { content: ''; position: absolute; width: 280px; height: 280px; left: -170px; bottom: -180px; border: 55px solid rgba(16,48,58,.05); border-radius: 50%; }
+.hero-inner { position: relative; z-index: 1; width: min(1180px, calc(100% - 48px)); margin: 0 auto; display: grid; grid-template-columns: 1.02fr .98fr; gap: 88px; align-items: center; }
+.eyebrow { display: inline-flex; align-items: center; gap: 9px; margin-bottom: 24px; color: #5e72e4; font-size: 11px; font-weight: 800; letter-spacing: .16em; }
+.eyebrow i { width: 22px; height: 2px; background: #825ee4; }
+.hero h1 { max-width: 650px; margin-bottom: 22px; color: #102f39; font-size: clamp(40px, 4.8vw, 62px); line-height: 1.17; letter-spacing: -.045em; font-weight: 800; }
+.hero h1 em { color: #5e72e4; font-style: normal; }
+.hero-copy > p { max-width: 570px; margin-bottom: 30px; color: #60727a; font-size: 17px; line-height: 1.8; word-break: keep-all; }
+.hero-actions { display: flex; gap: 10px; margin-bottom: 23px; }
+.hero-primary { padding: 13px 22px; background: linear-gradient(135deg, #5e72e4, #825ee4); border: 1px solid #5e72e4; color: #fff; border-radius: 8px; }
+.hero-primary:hover { background: linear-gradient(135deg, #4a5bd4, #7048d6); transform: translateY(-1px); }
+.hero-secondary { padding: 13px 22px; background: rgba(255,255,255,.6); border: 1px solid #c9d8d5; color: #29434b; border-radius: 8px; }
+.hero-secondary:hover { background: #fff; border-color: #aebfbb; }
+.trust-note { display: flex; align-items: center; gap: 8px; color: #74868c; font-size: 12px; }
+.trust-note span { display: grid; width: 20px; height: 20px; place-items: center; border-radius: 50%; background: #e5e8ff; color: #5e72e4; font-weight: 800; }
 
-/* 강의 섹션 */
-.popular-section { padding: 72px 0; background: #fff; }
-.section-inner { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
-.section-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 24px;
-}
-.section-title { font-size: 22px; font-weight: 700; color: var(--color-text-primary); }
-.section-title.center { text-align: center; margin-bottom: 40px; }
-.section-link { font-size: 14px; color: var(--color-primary); font-weight: 500; }
-.section-link:hover { text-decoration: underline; }
+.workflow-panel { padding: 28px; border: 1px solid rgba(255,255,255,.75); border-radius: 22px; background: rgba(255,255,255,.78); box-shadow: 0 28px 70px rgba(33,72,75,.13); backdrop-filter: blur(14px); }
+.panel-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 22px; }
+.panel-header strong { display: block; color: #14333c; font-size: 20px; }
+.live-badge { display: inline-flex; align-items: center; gap: 7px; padding: 6px 10px; border: 1px solid #d7dcfa; border-radius: 99px; background: #f0f2ff; color: #4a5bd4; font-size: 11px; font-weight: 700; }
+.live-badge i { width: 7px; height: 7px; border-radius: 50%; background: #16a086; box-shadow: 0 0 0 4px rgba(22,160,134,.12); }
+.status-card { display: grid; grid-template-columns: 42px 1fr auto; gap: 13px; align-items: center; margin-top: 10px; padding: 15px; border: 1px solid #e2eae8; border-radius: 12px; background: #fff; }
+.status-card.status-main { border-color: #cdd4f6; box-shadow: 0 8px 24px rgba(94,114,228,.10); }
+.status-card.muted { opacity: .66; }
+.status-icon { display: grid; width: 42px; height: 42px; place-items: center; border-radius: 10px; background: #eef0ff; color: #5e72e4; font-size: 12px; font-weight: 800; }
+.status-card span { display: block; color: #819096; font-size: 10px; }
+.status-card strong { color: #29434b; font-size: 13px; }
+.status-check { display: grid !important; width: 24px; height: 24px; place-items: center; border-radius: 50%; background: #5e72e4; color: #fff !important; font-weight: 800; }
+.status-state { padding: 5px 8px; border-radius: 5px; background: #edf3f2; color: #5e7479 !important; font-weight: 700; }
+.panel-summary { display: grid; grid-template-columns: repeat(3, 1fr); margin-top: 22px; padding-top: 20px; border-top: 1px solid #e1e9e7; }
+.panel-summary div { padding-left: 16px; border-left: 1px solid #e1e9e7; }
+.panel-summary div:first-child { padding-left: 0; border-left: 0; }
+.panel-summary strong, .panel-summary span { display: block; }
+.panel-summary strong { color: #173640; font-size: 15px; }
+.panel-summary span { color: #87959a; font-size: 10px; }
 
-.course-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 16px;
-}
-.course-card-landing {
-  background: var(--color-bg-primary);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-lg);
-  overflow: hidden;
-  transition: var(--transition);
-  box-shadow: var(--shadow-sm);
-}
-.course-card-landing:hover {
-  transform: translateY(-6px);
-  box-shadow: var(--shadow-md);
-}
-.card-thumb {
-  height: 150px;
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  overflow: hidden;
-}
-.thumb-teal   { background: linear-gradient(135deg, #e5fbf2, #c6f3df); }
-.thumb-blue   { background: linear-gradient(135deg, #e7f5ff, #cbdfff); }
-.thumb-purple { background: linear-gradient(135deg, #f1ecff, #dacbff); }
-.thumb-pink   { background: #FBEAF0; }
-.care-emoji { font-size: 72px; filter: drop-shadow(0 10px 18px rgba(50,50,93,.16)); transition: transform .25s ease; }
-.course-card-landing:hover .care-emoji { transform: scale(1.08) rotate(-3deg); }
-.available-label { position: absolute; right: 12px; top: 12px; padding: 4px 9px; border-radius: 20px; background: rgba(255,255,255,.88); color: var(--color-secondary); font-size: 10px; font-weight: 800; }
-.card-body { padding: 14px 16px; display: flex; flex-direction: column; gap: 6px; }
-.card-title { font-size: 14px; font-weight: 600; color: var(--color-text-primary); line-height: 1.4; }
-.card-meta { display: flex; justify-content: space-between; align-items: center; }
-.instructor { font-size: 12px; color: var(--color-text-secondary); }
-.price { font-size: 14px; font-weight: 600; color: var(--color-primary); }
+.process-section { padding: 82px 0; background: #fff; }
+.section-intro { max-width: 600px; margin-bottom: 42px; }
+.section-intro h2, .section-heading-row h2 { color: #173640; font-size: 30px; line-height: 1.3; letter-spacing: -.025em; }
+.section-intro p, .section-heading-row p { margin-top: 9px; color: #77888e; font-size: 14px; }
+.process-list { display: grid; grid-template-columns: repeat(4, 1fr); border-top: 1px solid #dfe8e6; border-bottom: 1px solid #dfe8e6; }
+.process-item { position: relative; min-height: 224px; padding: 28px 28px 28px 0; }
+.process-item + .process-item { padding-left: 28px; border-left: 1px solid #dfe8e6; }
+.process-number { margin-bottom: 30px; color: #aab7b9; font-size: 11px; font-weight: 800; letter-spacing: .14em; }
+.process-icon { display: grid; width: 42px; height: 42px; place-items: center; margin-bottom: 17px; border-radius: 10px; background: #eef0ff; color: #5e72e4; font-size: 20px; font-weight: 800; }
+.process-item h3 { margin-bottom: 7px; color: #213d45; font-size: 16px; }
+.process-item p { color: #7b8b90; font-size: 12px; line-height: 1.65; word-break: keep-all; }
+.process-arrow { position: absolute; z-index: 1; top: 105px; right: -13px; display: grid; width: 26px; height: 26px; place-items: center; border: 1px solid #d7e3e0; border-radius: 50%; background: #fff; color: #6b827f; font-size: 12px; }
 
-/* 특징 */
-.features-section { padding: 80px 0; background: var(--color-bg-secondary); }
-.features-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 20px;
-}
-.feature-card {
-  padding: 28px 24px;
-  background: #fff;
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-lg);
-  text-align: left;
-  box-shadow: var(--shadow-sm);
-  transition: var(--transition);
-}
-.feature-card:hover { box-shadow: var(--shadow-md); transform: translateY(-2px); }
-.feature-icon { width: 54px; height: 54px; display:grid; place-items:center; border-radius: 18px; background: var(--color-primary-light); font-size: 28px; margin-bottom: 18px; }
-.feature-title { font-size: 15px; font-weight: 600; margin-bottom: 8px; }
-.feature-desc { font-size: 13px; color: var(--color-text-secondary); line-height: 1.6; }
+.services-section { padding: 86px 0 92px; background: #f7f9fc; }
+.section-heading-row { display: flex; align-items: flex-end; justify-content: space-between; gap: 28px; margin-bottom: 32px; }
+.text-link { flex: none; color: #5e72e4; font-size: 13px; font-weight: 800; }
+.text-link span { margin-left: 7px; transition: margin .2s ease; }
+.text-link:hover span { margin-left: 12px; }
+.service-list { overflow: hidden; border: 1px solid #dce5e3; border-radius: 16px; background: #fff; box-shadow: 0 16px 45px rgba(40,67,70,.06); }
+.service-row { display: grid; grid-template-columns: 62px minmax(0, 1fr) 110px 150px 28px; gap: 20px; align-items: center; min-height: 112px; padding: 20px 24px; transition: background .2s ease; }
+.service-row + .service-row { border-top: 1px solid #e4ebe9; }
+.service-row:hover { background: #f7fbfa; }
+.service-symbol { display: grid; width: 58px; height: 58px; place-items: center; border-radius: 12px; font-size: 24px; font-weight: 700; }
+.service-symbol.teal { background: #e2f4ef; color: #087667; }
+.service-symbol.blue { background: #e5eff4; color: #366d86; }
+.service-symbol.purple { background: #eee9f4; color: #6c5580; }
+.service-symbol.gray { background: #edf0f0; color: #647477; }
+.service-type { color: #5e72e4; font-size: 10px; font-weight: 800; }
+.service-copy h3 { overflow: hidden; margin: 2px 0; color: #203c44; font-size: 16px; text-overflow: ellipsis; white-space: nowrap; }
+.service-copy p { color: #849297; font-size: 12px; }
+.request-count span, .service-price span { display: block; margin-bottom: 3px; color: #8a979b; font-size: 10px; }
+.request-count strong { color: #4d6268; font-size: 13px; }
+.service-price { text-align: right; }
+.service-price strong { color: #153942; font-size: 15px; }
+.row-arrow { color: #78908c; font-size: 17px; transition: transform .2s ease; }
+.service-row:hover .row-arrow { transform: translateX(4px); }
+.service-empty { display: flex; align-items: center; gap: 18px; min-height: 130px; padding: 28px; border: 1px solid #dce5e3; border-radius: 16px; background: #fff; }
+.empty-icon { display: grid; flex: none; width: 48px; height: 48px; place-items: center; border-radius: 12px; background: #eef0ff; color: #5e72e4; font-size: 20px; font-weight: 800; }
+.service-empty div { flex: 1; }
+.service-empty h3 { color: #29434b; font-size: 15px; }
+.service-empty p { margin-top: 3px; color: #849297; font-size: 12px; }
+.retry-button { padding: 9px 14px; border: 1px solid #c8d8d4; border-radius: 7px; background: #fff; color: #315058; font-size: 12px; }
+.skeleton-row { pointer-events: none; }
+.skeleton-block { display: block; border-radius: 8px; background: linear-gradient(90deg, #edf1f0 25%, #f7f9f8 50%, #edf1f0 75%); background-size: 200% 100%; animation: skeleton 1.4s infinite; }
+.skeleton-icon { width: 58px; height: 58px; }
+.skeleton-copy { width: min(340px, 90%); height: 34px; }
+.skeleton-price { width: 110px; height: 24px; grid-column: 4; }
+@keyframes skeleton { to { background-position: -200% 0; } }
 
-/* CTA */
-.cta-section {
-  padding: 80px 0;
-  background:
-    radial-gradient(circle at 15% 50%, rgba(45,206,137,.22), transparent 18rem),
-    linear-gradient(135deg, #172b4d 0%, #5e72e4 55%, #825ee4 100%);
-  text-align: center;
-}
-.cta-inner { max-width: 600px; margin: 0 auto; padding: 0 24px; }
-.cta-inner h2 { font-size: 32px; font-weight: 700; color: #fff; margin-bottom: 12px; }
-.cta-inner p { font-size: 16px; color: rgba(255,255,255,0.8); margin-bottom: 32px; }
-.cta-inner .btn-primary {
-  background: #fff;
-  color: var(--color-primary);
-  border-color: #fff;
-  font-weight: 600;
-}
-.cta-inner .btn-primary:hover { background: #f0f7ff; }
+.role-section { padding: 86px 0; background: #fff; }
+.role-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+.role-card { position: relative; overflow: hidden; min-height: 350px; padding: 46px; border-radius: 18px; }
+.role-card::after { content: ''; position: absolute; width: 240px; height: 240px; right: -90px; bottom: -120px; border: 48px solid currentColor; border-radius: 50%; opacity: .07; }
+.generator-card { background: #eef0ff; color: #5e72e4; }
+.carrier-card { background: linear-gradient(135deg, #27364b, #4a5bd4); color: #cdd4ff; }
+.role-label { display: inline-block; margin-bottom: 28px; padding: 6px 10px; border: 1px solid currentColor; border-radius: 5px; font-size: 10px; font-weight: 800; }
+.role-card h2 { margin-bottom: 24px; color: #173640; font-size: 25px; line-height: 1.45; letter-spacing: -.02em; }
+.carrier-card h2 { color: #fff; }
+.role-card ul { margin: 0 0 30px; padding: 0; list-style: none; }
+.role-card li { margin-top: 9px; color: #60777d; font-size: 13px; }
+.carrier-card li { color: #b8c9cd; }
+.role-card li::before { content: '✓'; margin-right: 9px; color: #5e72e4; font-weight: 800; }
+.carrier-card li::before { color: #cdd4ff; }
+.role-card a { position: relative; z-index: 1; color: #5e72e4; font-size: 13px; font-weight: 800; }
+.carrier-card a { color: #fff; }
 
-/* 푸터 */
-.footer {
-  background: #172b4d;
-  padding: 32px 0;
-}
-.footer-inner {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 24px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-.footer-logo {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  color: #fff;
-  font-size: 15px;
-  font-weight: 600;
-}
-.footer-symbol { width:28px; height:28px; display:grid; place-items:center; border-radius:8px; background:rgba(255,255,255,.12); }
-.footer-copy { font-size: 13px; color: rgba(255,255,255,0.5); }
+.cta-section { padding: 92px 24px; background: linear-gradient(135deg, #172b4d 0%, #5e72e4 60%, #825ee4 100%); text-align: center; }
+.cta-inner { max-width: 700px; margin: 0 auto; }
+.cta-inner > span { display: block; margin-bottom: 15px; color: #d9ddff; font-size: 10px; font-weight: 800; letter-spacing: .18em; }
+.cta-inner h2 { color: #fff; font-size: 34px; line-height: 1.4; letter-spacing: -.03em; }
+.cta-inner p { margin: 12px 0 30px; color: #a9bdc1; font-size: 14px; }
+.cta-button { padding: 12px 20px; border-radius: 7px; background: #fff; color: #5e72e4; }
+.cta-button:hover { background: #eef0ff; transform: translateY(-1px); }
 
-@media (max-width: 820px) {
-  .hero-inner { grid-template-columns: 1fr; text-align: center; }
-  .hero-desc { margin-left: auto; margin-right: auto; }
-  .hero-actions, .hero-stats { justify-content: center; }
-  .pet-scene { width: min(380px, 86vw); }
-  .course-grid { grid-template-columns: repeat(2, 1fr); }
-  .features-grid { grid-template-columns: repeat(2, 1fr); }
+.footer { padding: 28px 0; background: #172b4d; }
+.footer-inner { width: min(1180px, calc(100% - 48px)); margin: 0 auto; display: flex; align-items: center; gap: 30px; color: #748d92; }
+.footer-logo { display: flex; align-items: center; gap: 8px; margin-right: auto; color: #d7e4e5; font-size: 13px; font-weight: 800; }
+.footer-logo span { display: grid; width: 27px; height: 27px; place-items: center; border-radius: 7px; background: rgba(255,255,255,.12); color: #d9ddff; }
+.footer p, .footer small { font-size: 10px; }
+
+@media (max-width: 900px) {
+  .hero-inner { grid-template-columns: 1fr; gap: 50px; }
+  .hero-copy { text-align: center; }
+  .hero-copy > p { margin-right: auto; margin-left: auto; }
+  .hero-actions, .trust-note { justify-content: center; }
+  .workflow-panel { max-width: 620px; margin: 0 auto; }
+  .process-list { grid-template-columns: repeat(2, 1fr); }
+  .process-item:nth-child(3) { border-top: 1px solid #dfe8e6; border-left: 0; padding-left: 0; }
+  .process-item:nth-child(4) { border-top: 1px solid #dfe8e6; }
+  .process-arrow { display: none; }
+  .service-row { grid-template-columns: 58px minmax(0, 1fr) 130px 24px; }
+  .request-count { display: none; }
+  .service-price { grid-column: 3; }
+  .role-card { padding: 36px; }
 }
-@media (max-width: 560px) {
-  .hero { padding-top: 48px; }
+
+@media (max-width: 640px) {
+  .section-inner, .hero-inner, .footer-inner { width: min(100% - 32px, 1180px); }
+  .hero { padding: 58px 0; }
+  .hero h1 { font-size: 38px; }
+  .hero-copy > p { font-size: 15px; }
   .hero-actions { flex-direction: column; }
-  .hero-stats { gap: 18px; }
-  .course-grid, .features-grid { grid-template-columns: 1fr; }
-  .footer-inner { flex-direction: column; gap: 12px; }
+  .hero-actions .btn { justify-content: center; }
+  .trust-note { align-items: flex-start; text-align: left; }
+  .workflow-panel { padding: 20px; }
+  .status-card { grid-template-columns: 38px 1fr; }
+  .status-card > :last-child { display: none !important; }
+  .panel-summary { gap: 8px; }
+  .panel-summary div { padding-left: 8px; }
+  .process-section, .services-section, .role-section { padding: 64px 0; }
+  .process-list { grid-template-columns: 1fr; }
+  .process-item, .process-item + .process-item, .process-item:nth-child(3) { min-height: 0; padding: 24px 0; border-top: 1px solid #dfe8e6; border-left: 0; }
+  .process-item:first-child { border-top: 0; }
+  .process-number { margin-bottom: 16px; }
+  .section-heading-row { align-items: flex-start; flex-direction: column; }
+  .section-intro h2, .section-heading-row h2 { font-size: 26px; }
+  .service-row { grid-template-columns: 48px minmax(0, 1fr) 18px; gap: 12px; padding: 17px 15px; }
+  .service-symbol { width: 46px; height: 46px; font-size: 19px; }
+  .service-price, .request-count { display: none; }
+  .service-copy h3 { font-size: 14px; }
+  .service-empty { align-items: flex-start; flex-wrap: wrap; }
+  .service-empty .retry-button { margin-left: 66px; }
+  .role-grid { grid-template-columns: 1fr; }
+  .role-card { min-height: 320px; padding: 32px 26px; }
+  .cta-inner h2 { font-size: 28px; }
+  .footer-inner { align-items: flex-start; flex-direction: column; gap: 10px; }
 }
 </style>
