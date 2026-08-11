@@ -35,6 +35,10 @@ export const authApi = {
     return api.get('/api/users/me')
   },
 
+  getUser(userId) {
+    return api.get(`/api/users/${userId}`)
+  },
+
   // 회원가입
   register(data) {
     return api.post('/api/users/register', data)

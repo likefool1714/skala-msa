@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
 import { courseApi } from '@/api/course.js'
+import { authApi } from '@/api/auth.js'
 
 export const useCourseStore = defineStore('course', () => {
   const courses = ref([])
@@ -50,6 +51,24 @@ export const useCourseStore = defineStore('course', () => {
     }
   }
 
+  async function attachCarrierNames(rawCourses) {
+    const cache = new Map()
+    return Promise.all(rawCourses.map(async (course) => {
+      const carrierId = course?.carrierId
+      if (!carrierId) return normalizeCourse(course)
+      try {
+        if (!cache.has(carrierId)) {
+          cache.set(carrierId, authApi.getUser(carrierId).then(res => res.data?.data ?? res.data))
+        }
+        const carrier = await cache.get(carrierId)
+        return normalizeCourse({ ...course, carrierName: carrier?.organizationName || carrier?.name })
+      } catch (error) {
+        console.warn('[CourseStore] failed to load carrier name:', carrierId, error)
+        return normalizeCourse(course)
+      }
+    }))
+  }
+
   function getThumbnail(course) {
     const thumbKey = course?.thumbnail?.toUpperCase?.() || ''
     if (thumbKey && thumbnailMap[thumbKey]) {
@@ -73,7 +92,7 @@ export const useCourseStore = defineStore('course', () => {
           ? res.data
           : []
 
-      courses.value = rawCourses.map(normalizeCourse)
+      courses.value = await attachCarrierNames(rawCourses)
 
       console.log('[CourseStore] normalized courses =', courses.value)
     } catch (e) {
@@ -98,7 +117,7 @@ export const useCourseStore = defineStore('course', () => {
           ? res.data.data
           : res.data
 
-      selectedCourse.value = normalizeCourse(rawCourse)
+      selectedCourse.value = (await attachCarrierNames([rawCourse]))[0]
 
       console.log('[CourseStore] normalized selectedCourse =', selectedCourse.value)
     } catch (e) {

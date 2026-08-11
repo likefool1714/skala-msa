@@ -30,7 +30,9 @@
             <div v-if="sessionExpired" class="session-notice">
               로그인 시간이 만료되었습니다. 다시 로그인해 주세요.
             </div>
-            <button class="btn btn-primary btn-full" @click="handleOAuth">로그인</button>
+            <button class="btn btn-primary btn-full" :disabled="loginLoading" @click="handleOAuth">
+              {{ loginLoading ? '로그인 화면을 준비하는 중...' : '로그인' }}
+            </button>
             <div class="switch-link">
               계정이 없으신가요?
               <button class="text-btn" @click="showRegister = true">회원가입</button>
@@ -42,8 +44,8 @@
             <h3 class="section-title">회원가입</h3>
             <form @submit.prevent="handleRegister" class="form">
               <div class="form-group">
-                <label class="form-label">이름</label>
-                <input v-model="registerForm.name" type="text" class="form-input" placeholder="홍길동" required />
+				<label class="form-label">담당자명</label>
+				<input v-model.trim="registerForm.name" type="text" class="form-input" placeholder="홍길동" required />
               </div>
               <div class="form-group">
                 <label class="form-label">이메일</label>
@@ -56,9 +58,19 @@
               <div class="form-group">
                 <label class="form-label">역할</label>
                 <select v-model="registerForm.role" class="form-input">
-                  <option value="STUDENT">의료폐기물 배출 사업장</option>
-                  <option value="INSTRUCTOR">수집·운반 업체</option>
+                  <option value="STUDENT">병원·의원(의료폐기물 배출 사업장)</option>
+                  <option value="INSTRUCTOR">의료폐기물 수집·운반 업체</option>
                 </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label">{{ organizationLabel }}</label>
+                <input
+                  v-model.trim="registerForm.organizationName"
+                  type="text"
+                  class="form-input"
+                  :placeholder="organizationPlaceholder"
+                  required
+                />
               </div>
               <div v-if="error" class="error-msg">{{ error }}</div>
               <div v-if="success" class="success-msg">{{ success }}</div>
@@ -91,15 +103,19 @@ const sessionExpired = computed(() => route.query.expired === '1')
 
 const showRegister = ref(false)
 const loading = ref(false)
+const loginLoading = ref(false)
 const error = ref('')
 const success = ref('')
 
-const registerForm = ref({ name: '', email: '', password: '', role: 'STUDENT' })
+const registerForm = ref({ name: '', email: '', password: '', role: 'STUDENT', organizationName: '' })
+const organizationLabel = computed(() => registerForm.value.role === 'INSTRUCTOR' ? '수거업체명' : '병원·의원명')
+const organizationPlaceholder = computed(() => registerForm.value.role === 'INSTRUCTOR' ? '예: 그린메디컬 운반' : '예: 행복의원')
 
 const features = ['희망일 기반 수거 신청', '이력 기반 수거 서비스 추천', '결제 후 수거 접수 자동 확정']
 
-function handleOAuth() {
-  auth.redirectToLogin()
+async function handleOAuth() {
+  loginLoading.value = true
+  await auth.redirectToLogin()
 }
 
 async function handleRegister() {
@@ -109,7 +125,7 @@ async function handleRegister() {
   try {
     await authApi.register(registerForm.value)
     success.value = '회원가입 완료! 로그인 페이지로 이동합니다.'
-    registerForm.value = { name: '', email: '', password: '', role: 'STUDENT' }
+    registerForm.value = { name: '', email: '', password: '', role: 'STUDENT', organizationName: '' }
     setTimeout(() => {
       showRegister.value = false
       success.value = ''

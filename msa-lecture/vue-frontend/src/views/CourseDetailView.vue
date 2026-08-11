@@ -14,14 +14,8 @@
             </p>
 
             <div class="detail-meta">
-              <span>🏢 수집·운반 업체 #{{ course.carrierId }}</span>
-              <span>✓ 업체 정보 등록</span>
+              <span>🏢 {{ course.carrierName || '수집·운반 업체' }}</span>
               <span>♻️ 접수 {{ displayEnrollmentCount }}건</span>
-            </div>
-            <div class="trust-panel">
-              <div><strong>업체 정보</strong><span>수집·운반 업체 정보 확인</span></div>
-              <div><strong>비용 결제</strong><span>결제 후 수거 접수 확정</span></div>
-              <div><strong>업무 기록</strong><span>수거 조건과 폐기물 정보 관리</span></div>
             </div>
           </div>
 
@@ -44,10 +38,16 @@
                   <span>–</span>
                   <input v-model="reservation.preferredEndTime" type="time" class="form-input" aria-label="종료 시간" />
                 </div>
+                <p class="time-guide">24시간 기준 · {{ timeRangeGuide }}</p>
                 <label class="field-label">폐기물 정보</label>
                 <input v-model.trim="reservation.wasteInformation" class="form-input" placeholder="예: 일반의료폐기물 20kg · 전용용기 4개" />
                 <label class="field-label">수거 조건·요청사항 <span>(선택)</span></label>
                 <textarea v-model.trim="reservation.collectionRequirements" class="form-input" rows="3" placeholder="사업장 위치, 출입 절차 등 필요한 내용을 입력하세요"></textarea>
+                <div class="form-checklist" aria-live="polite">
+                  <p :class="{ complete: fieldChecks.date }"><span>{{ fieldChecks.date ? '✓' : '·' }}</span> 희망 수거일</p>
+                  <p :class="{ complete: fieldChecks.time }"><span>{{ fieldChecks.time ? '✓' : '·' }}</span> 시작·종료 시간</p>
+                  <p :class="{ complete: fieldChecks.waste }"><span>{{ fieldChecks.waste ? '✓' : '·' }}</span> 폐기물 정보</p>
+                </div>
               </template>
 
               <button
@@ -66,11 +66,6 @@
                 {{ helperText }}
               </p>
 
-              <ul class="enroll-info-list">
-                <li>✅ 결제 완료 후 수거 접수 자동 확정</li>
-                <li>✅ 희망 수거일·시간 지정</li>
-                <li>✅ 신청 관리에서 접수 상태 확인</li>
-              </ul>
             </div>
           </div>
         </div>
@@ -103,8 +98,27 @@ const auth = useAuthStore()
 const enrolling = ref(false)
 const enrollError = ref('')
 const enrollmentStatus = ref('NONE') // NONE | PENDING | CONFIRMED | ACCEPTED | COMPLETED | REJECTED | CANCELLED
-const minDate = new Date().toISOString().slice(0, 10)
+function localDateString(date = new Date()) {
+  const year = date.getFullYear()
+  const month = String(date.getMonth() + 1).padStart(2, '0')
+  const day = String(date.getDate()).padStart(2, '0')
+  return `${year}-${month}-${day}`
+}
+
+const minDate = localDateString()
 const reservation = reactive({ preferredCollectionDate: '', preferredStartTime: '', preferredEndTime: '', wasteInformation: '', collectionRequirements: '' })
+const fieldChecks = computed(() => ({
+  date: Boolean(reservation.preferredCollectionDate),
+  time: Boolean(reservation.preferredStartTime && reservation.preferredEndTime && reservation.preferredStartTime !== reservation.preferredEndTime),
+  waste: Boolean(reservation.wasteInformation.trim())
+}))
+const reservationComplete = computed(() => Object.values(fieldChecks.value).every(Boolean))
+const crossesMidnight = computed(() => fieldChecks.value.time && reservation.preferredEndTime < reservation.preferredStartTime)
+const timeRangeGuide = computed(() => {
+  if (!reservation.preferredStartTime || !reservation.preferredEndTime) return '시작과 종료 시간을 선택하세요.'
+  if (reservation.preferredStartTime === reservation.preferredEndTime) return '시작과 종료 시간은 다르게 선택해야 합니다.'
+  return `${reservation.preferredStartTime} → ${crossesMidnight.value ? '다음 날 ' : ''}${reservation.preferredEndTime}`
+})
 
 const course = computed(() => courseStore.selectedCourse)
 const loading = computed(() => courseStore.loading)
@@ -173,6 +187,7 @@ const buttonDisabled = computed(() => {
   if (enrolling.value) return true
   if (isInstructor.value) return true
   if (enrollmentStatus.value === 'PENDING') return true
+  if (enrollmentStatus.value === 'NONE' && !reservationComplete.value) return true
   return false
 })
 
@@ -261,8 +276,8 @@ async function handlePrimaryAction() {
     return
   }
 
-  if (!reservation.preferredCollectionDate || !reservation.preferredStartTime || !reservation.preferredEndTime || !reservation.wasteInformation) {
-    enrollError.value = '희망 수거일, 시작·종료 시간, 폐기물 정보를 입력해 주세요.'
+  if (!reservationComplete.value) {
+		enrollError.value = '필수 항목을 모두 입력하고, 시작과 종료 시간을 다르게 지정해 주세요.'
     return
   }
 
@@ -346,16 +361,11 @@ watch(
   color: var(--color-text-secondary);
   flex-wrap: wrap;
 }
-.trust-panel {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 10px;
-  margin-top: 18px;
-}
-.trust-panel div { padding: 15px; border: 1px solid var(--color-border); border-radius: 15px; background: rgba(255,255,255,.7); }
-.trust-panel strong, .trust-panel span { display: block; }
-.trust-panel strong { font-size: 13px; margin-bottom: 3px; }
-.trust-panel span { font-size: 11px; color: var(--color-text-secondary); }
+.form-checklist { display: grid; gap: 6px; margin: 10px 0 4px; padding: 12px; border-radius: 12px; background: var(--color-bg-secondary); }
+.form-checklist p { margin: 0; font-size: 12px; color: var(--color-text-muted); }
+.form-checklist p.complete { color: #14865a; font-weight: 700; }
+.form-checklist span { display: inline-grid; place-items: center; width: 16px; }
+.time-guide { margin: 6px 0 2px; font-size: 11px; color: var(--color-text-muted); }
 
 .enroll-card {
   background: var(--color-bg-primary);

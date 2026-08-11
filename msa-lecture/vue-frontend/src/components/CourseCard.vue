@@ -10,7 +10,7 @@
       <span class="badge" :class="badgeClass">{{ displayWasteType }}</span>
       <h3 class="card-title">{{ course.name }}</h3>
       <div class="card-meta">
-        <span class="instructor">수집·운반 업체 #{{ course.carrierId }}</span>
+        <span class="instructor">{{ course.carrierName || '수집·운반 업체' }}</span>
         <span class="price">₩{{ Number(course.price).toLocaleString() }}</span>
       </div>
       <div class="card-footer">
