@@ -43,8 +43,8 @@ public class EnrollmentService {
         if (request.getPreferredCollectionDate().isBefore(java.time.LocalDate.now())) {
             throw new IllegalArgumentException("지난 날짜로 수거를 신청할 수 없습니다");
         }
-        if (!request.getPreferredEndTime().isAfter(request.getPreferredStartTime())) {
-            throw new IllegalArgumentException("종료 시간은 시작 시간보다 늦어야 합니다");
+        if (request.getPreferredEndTime().equals(request.getPreferredStartTime())) {
+            throw new IllegalArgumentException("시작 시간과 종료 시간은 달라야 합니다");
         }
         if (enrollmentRepository.existsByGeneratorIdAndCollectionServiceIdAndPreferredCollectionDateAndPreferredStartTime(
                 generatorId, collectionServiceId, request.getPreferredCollectionDate(), request.getPreferredStartTime())) {
@@ -66,10 +66,14 @@ public class EnrollmentService {
      */
     @Transactional
     public void confirmReservation(Long requestId, Long generatorId, Long collectionServiceId) {
-        Enrollment enrollment = enrollmentRepository.findByIdAndGeneratorId(requestId, generatorId)
+        Enrollment enrollment = enrollmentRepository.findByIdAndGeneratorIdForUpdate(requestId, generatorId)
                 .orElseThrow(() -> new IllegalArgumentException("수거 신청을 찾을 수 없습니다: " + requestId));
 
-        enrollment.confirm();
+        if (!enrollment.confirmIfPending()) {
+            log.info("[CollectionRequestService] 이미 처리된 결제 이벤트 무시 - requestId: {}, status: {}",
+                    requestId, enrollment.getStatus());
+            return;
+        }
 
         courseServiceClient.increaseEnrollmentCount(collectionServiceId);
 

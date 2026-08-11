@@ -64,8 +64,12 @@ public class Enrollment {
         CANCELLED  // 취소
     }
 
-    public void confirm() {
+    public boolean confirmIfPending() {
+        if (this.status != Status.PENDING) {
+            return false;
+        }
         this.status = Status.CONFIRMED;
+        return true;
     }
 
     public void cancel() {
