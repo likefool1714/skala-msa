@@ -7,6 +7,7 @@ CREATE TABLE IF NOT EXISTS users (
     email       VARCHAR(255)    NOT NULL UNIQUE,
     password    VARCHAR(255)    NOT NULL,
     name        VARCHAR(100)    NOT NULL,
+    organization_name VARCHAR(255) NOT NULL,
     role        VARCHAR(20)     NOT NULL COMMENT 'STUDENT(배출 사업장) | INSTRUCTOR(수집·운반 업체)',
     created_at  DATETIME(6),
     updated_at  DATETIME(6),

@@ -30,6 +30,11 @@ public class User {
     @Column(nullable = false)
     private String name;
 
+    // 기존 실습 DB의 회원 행과도 호환되도록 DB 컬럼은 nullable로 유지하고,
+    // 신규 회원가입은 DTO 검증으로 필수 입력한다.
+    @Column
+    private String organizationName;
+
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Role role;

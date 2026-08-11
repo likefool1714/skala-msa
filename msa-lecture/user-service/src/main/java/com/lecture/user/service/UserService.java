@@ -31,6 +31,7 @@ public class UserService {
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
                 .name(request.getName())
+                .organizationName(request.getOrganizationName())
                 .role(role)
                 .build();
 

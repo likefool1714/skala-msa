@@ -30,6 +30,9 @@ public class UserDto {
         @NotBlank(message = "이름은 필수입니다")
         private String name;
 
+        @NotBlank(message = "병원·의원명 또는 수거업체명은 필수입니다")
+        private String organizationName;
+
         private User.Role role; // STUDENT: 배출 사업장, INSTRUCTOR: 수집·운반 업체
     }
 
@@ -42,6 +45,7 @@ public class UserDto {
         private Long id;
         private String email;
         private String name;
+        private String organizationName;
         private User.Role role;
         private LocalDateTime createdAt;
 
@@ -50,6 +54,7 @@ public class UserDto {
                     .id(user.getId())
                     .email(user.getEmail())
                     .name(user.getName())
+                    .organizationName(user.getOrganizationName())
                     .role(user.getRole())
                     .createdAt(user.getCreatedAt())
                     .build();
