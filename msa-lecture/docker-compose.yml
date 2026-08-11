@@ -147,8 +147,8 @@ services:
       context: ./user-service
       dockerfile: Dockerfile
     container_name: lecture-user
-    ports:
-      - "8081:8081"
+    expose:
+      - "8081"
     environment:
       - SPRING_PROFILES_ACTIVE=docker
       - SPRING_DATASOURCE_URL=jdbc:mariadb://lecturedb:3306/lecture_db
@@ -156,7 +156,7 @@ services:
       - SPRING_DATASOURCE_PASSWORD=SqlDba-1
       - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka-server:8761/eureka/
       - SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_JWK_SET_URI=http://auth-server:9000/oauth2/jwks
-      - SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUER_URI=http://auth-server:9000
+      - SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUER_URI=http://localhost:8080
     depends_on:
       mariadb:
         condition: service_healthy
@@ -172,8 +172,8 @@ services:
       context: ./course-service
       dockerfile: Dockerfile
     container_name: lecture-course
-    ports:
-      - "8082:8082"
+    expose:
+      - "8082"
     environment:
       - SPRING_PROFILES_ACTIVE=docker
       - SPRING_DATASOURCE_URL=jdbc:mariadb://lecturedb:3306/lecture_db
@@ -181,7 +181,7 @@ services:
       - SPRING_DATASOURCE_PASSWORD=SqlDba-1
       - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka-server:8761/eureka/
       - SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_JWK_SET_URI=http://auth-server:9000/oauth2/jwks
-      - SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUER_URI=http://auth-server:9000
+      - SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUER_URI=http://localhost:8080
     depends_on:
       mariadb:
         condition: service_healthy
@@ -197,8 +197,8 @@ services:
       context: ./enrollment-service
       dockerfile: Dockerfile
     container_name: lecture-enrollment
-    ports:
-      - "8083:8083"
+    expose:
+      - "8083"
     environment:
       - SPRING_PROFILES_ACTIVE=docker
       - SPRING_DATASOURCE_URL=jdbc:mariadb://lecturedb:3306/lecture_db
@@ -206,7 +206,7 @@ services:
       - SPRING_DATASOURCE_PASSWORD=SqlDba-1
       - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka-server:8761/eureka/
       - SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_JWK_SET_URI=http://auth-server:9000/oauth2/jwks
-      - SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUER_URI=http://auth-server:9000
+      - SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUER_URI=http://localhost:8080
       - SPRING_KAFKA_BOOTSTRAP_SERVERS=kafka:9092
     depends_on:
       mariadb:
@@ -225,8 +225,8 @@ services:
       context: ./payment-service
       dockerfile: Dockerfile
     container_name: lecture-payment
-    ports:
-      - "8084:8084"
+    expose:
+      - "8084"
     environment:
       - SPRING_PROFILES_ACTIVE=docker
       - SPRING_DATASOURCE_URL=jdbc:mariadb://lecturedb:3306/lecture_db
@@ -234,7 +234,7 @@ services:
       - SPRING_DATASOURCE_PASSWORD=SqlDba-1
       - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka-server:8761/eureka/
       - SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_JWK_SET_URI=http://auth-server:9000/oauth2/jwks
-      - SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUER_URI=http://auth-server:9000
+      - SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUER_URI=http://localhost:8080
       - SPRING_KAFKA_BOOTSTRAP_SERVERS=kafka:9092
     depends_on:
       mariadb:
@@ -253,8 +253,8 @@ services:
       context: ./recommend-service
       dockerfile: Dockerfile
     container_name: lecture-recommend
-    ports:
-      - "8085:8085"
+    expose:
+      - "8085"
     environment:
       - EUREKA_SERVER_URL=http://eureka-server:8761/eureka
       - EUREKA_INSTANCE_HOST=recommend-service
