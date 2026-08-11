@@ -51,12 +51,30 @@ export const useAuthStore = defineStore('auth', () => {
   }
 
   // OAuth2 Authorization Code Flow
-  function redirectToLogin() {
+  async function redirectToLogin() {
+    // 인증 서버의 JSESSIONID까지 종료해 이전 계정 자동 로그인을 막는다.
+    accessToken.value = null
+    user.value = null
+    sessionStorage.removeItem('access_token')
+    sessionStorage.removeItem('user')
+
+    try {
+      await fetch(`${AUTH_SERVER_URL}/logout`, {
+        method: 'GET',
+        credentials: 'include',
+        mode: 'no-cors',
+        cache: 'no-store'
+      })
+    } catch (error) {
+      console.warn('[AuthStore] remote logout request failed:', error)
+    }
+
     const params = new URLSearchParams({
       response_type: 'code',
       client_id: import.meta.env.VITE_CLIENT_ID,
       redirect_uri: import.meta.env.VITE_REDIRECT_URI,
-      scope: 'openid profile read write'
+      scope: 'openid profile read write',
+      prompt: 'login'
     })
 
     window.location.href = `${AUTH_SERVER_URL}/oauth2/authorize?${params.toString()}`

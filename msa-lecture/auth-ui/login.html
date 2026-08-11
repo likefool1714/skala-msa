@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>MediWaste Hub 로그인</title>
+  <style>
+    *{box-sizing:border-box}body{margin:0;min-height:100vh;display:grid;place-items:center;padding:24px;background:linear-gradient(145deg,#f5f7ff 0%,#eef2ff 55%,#f5f2ff 100%);color:#172b4d;font-family:Pretendard,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+    .shell{width:min(100%,430px)}.brand{display:flex;align-items:center;justify-content:center;gap:11px;margin-bottom:26px;font-size:22px;font-weight:800;letter-spacing:-.5px}.brand b{color:#5e72e4}.mark{width:44px;height:44px;display:grid;place-items:center;border-radius:14px;background:linear-gradient(135deg,#dfe6ff,#eee7ff);color:#344b85;font-size:25px}
+    .card{padding:38px;border:1px solid #dce3f2;border-radius:24px;background:#fff;box-shadow:0 22px 55px rgba(48,63,132,.13)}.eyebrow{margin:0 0 8px;color:#5e72e4;font-size:11px;font-weight:800;letter-spacing:.16em}.card h1{margin:0;font-size:27px;letter-spacing:-.7px}.desc{margin:10px 0 28px;color:#718096;font-size:14px;line-height:1.6}
+    label{display:block;margin:0 0 8px;font-size:12px;font-weight:750;color:#344563}.field{margin-bottom:17px}input{width:100%;height:50px;padding:0 15px;border:1px solid #d7def0;border-radius:13px;background:#fbfcff;color:#172b4d;font-size:15px;outline:none;transition:.18s}input:focus{border-color:#5e72e4;box-shadow:0 0 0 4px rgba(94,114,228,.12);background:#fff}
+    button{width:100%;height:52px;margin-top:6px;border:0;border-radius:14px;background:linear-gradient(135deg,#5067dc,#7651e7);color:#fff;font-size:15px;font-weight:800;cursor:pointer;box-shadow:0 12px 24px rgba(94,114,228,.25)}button:hover{background:linear-gradient(135deg,#4359cd,#6842d8)}.notice{display:none;margin:0 0 18px;padding:12px 14px;border-radius:11px;background:#fff0f1;color:#bd2c3d;font-size:12px}.foot{margin:22px 0 0;text-align:center;color:#8996a5;font-size:11px}.back{display:block;margin-top:18px;text-align:center;color:#64748b;font-size:12px;text-decoration:none}
+    @media(max-width:520px){body{padding:16px}.card{padding:28px 22px;border-radius:20px}}
+  </style>
+</head>
+<body>
+  <main class="shell">
+    <div class="brand"><span class="mark">✚</span><span>MediWaste <b>Hub</b></span></div>
+    <section class="card">
+      <p class="eyebrow">SECURE WORKSPACE</p>
+      <h1>로그인</h1>
+      <p class="desc">병원·의원과 의료폐기물 수집·운반 업체를 위한<br>안전한 업무 계정으로 로그인하세요.</p>
+      <p id="error" class="notice">이메일 또는 비밀번호를 확인해 주세요.</p>
+      <form method="post" action="/login">
+        <div class="field"><label for="username">이메일</label><input id="username" name="username" type="email" placeholder="user@example.com" autocomplete="username" required autofocus></div>
+        <div class="field"><label for="password">비밀번호</label><input id="password" name="password" type="password" placeholder="비밀번호 입력" autocomplete="current-password" required></div>
+        <button type="submit">로그인</button>
+      </form>
+      <p class="foot">로그인 후 수거 업무 워크스페이스로 이동합니다.</p>
+    </section>
+    <a class="back" href="http://localhost:3000/login">← MediWaste Hub로 돌아가기</a>
+  </main>
+  <script>if(new URLSearchParams(location.search).has('error'))document.getElementById('error').style.display='block'</script>
+</body>
+</html>

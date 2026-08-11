@@ -112,8 +112,8 @@ services:
   api-gateway:
     image: msa-lecture/api-gateway:1.0
     container_name: lecture-gateway
-    ports:
-      - "8080:8080"
+    expose:
+      - "8080"
     environment:
       - SPRING_PROFILES_ACTIVE=docker
       - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka-server:8761/eureka/
@@ -124,6 +124,18 @@ services:
         condition: service_healthy
       auth-server:
         condition: service_healthy
+    networks:
+      - lecture-net
+
+  auth-ui:
+    build:
+      context: ./auth-ui
+      dockerfile: Dockerfile
+    container_name: lecture-auth-ui
+    ports:
+      - "8080:8080"
+    depends_on:
+      - api-gateway
     networks:
       - lecture-net
 
