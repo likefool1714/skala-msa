@@ -22,8 +22,14 @@
           <div class="spinner"></div>
         </div>
 
-        <div v-else-if="enrollments.length" class="enrollment-list fade-in">
-          <div v-for="item in enrollments" :key="item.id" class="enrollment-card">
+        <div v-else class="status-filters">
+          <router-link to="/enrollments" :class="['filter-chip', { active: !statusFilter }]">전체</router-link>
+          <router-link to="/enrollments?status=result" :class="['filter-chip', { active: statusFilter === 'result' }]">수락·거절·완료</router-link>
+          <router-link to="/enrollments?status=CONFIRMED" :class="['filter-chip', { active: statusFilter === 'CONFIRMED' }]">업체 확인 대기</router-link>
+        </div>
+
+        <div v-if="!loading && visibleEnrollments.length" class="enrollment-list fade-in">
+          <div v-for="item in visibleEnrollments" :key="item.id" class="enrollment-card">
             <div class="enroll-thumb" :class="getThumbBg(item.collectionService?.wasteType)">
               <div style="font-size:42px">♻️</div>
             </div>
@@ -33,7 +39,7 @@
                 {{ item.collectionService?.wasteType }}
               </span>
               <h3 class="enroll-title">{{ item.collectionService?.name }}</h3>
-              <p class="enroll-instructor">{{ item.preferredCollectionDate }} · {{ item.preferredStartTime }}~{{ item.preferredEndTime }}</p>
+              <p class="enroll-instructor">{{ formatSchedule(item) }}</p>
               <p class="enroll-instructor">폐기물 정보: {{ item.wasteInformation }}</p>
             </div>
 
@@ -53,7 +59,7 @@
           </div>
         </div>
 
-        <div v-else class="empty-state">
+        <div v-else-if="!loading" class="empty-state">
           <p class="empty-icon">📭</p>
           <p>등록된 수거 신청이 없습니다.</p>
           <router-link to="/courses" class="btn btn-primary" style="margin-top:16px;">
@@ -67,19 +73,33 @@
 
 <script setup>
 import { ref, computed, onMounted } from 'vue'
-import { useRouter } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import AppHeader from '@/components/AppHeader.vue'
 import DashboardSidebar from '@/components/DashboardSidebar.vue'
 import { enrollmentApi } from '@/api/enrollment.js'
 import { useAuthStore } from '@/store/auth.js'
 
 const router = useRouter()
+const route = useRoute()
 const auth = useAuthStore()
 
 const enrollments = ref([])
 const loading = ref(true)
 
 const isInstructor = computed(() => auth.user?.role === 'INSTRUCTOR')
+const statusFilter = computed(() => route.query.status || '')
+const visibleEnrollments = computed(() => {
+  if (statusFilter.value === 'result') {
+    return enrollments.value.filter(item => ['ACCEPTED', 'COMPLETED', 'REJECTED'].includes(item.status))
+  }
+  if (statusFilter.value) return enrollments.value.filter(item => item.status === statusFilter.value)
+  return enrollments.value
+})
+
+function formatSchedule(item) {
+  const nextDay = item.preferredStartTime && item.preferredEndTime && item.preferredEndTime < item.preferredStartTime
+  return `${item.preferredCollectionDate} · ${item.preferredStartTime} → ${nextDay ? '다음 날 ' : ''}${item.preferredEndTime}`
+}
 
 const categoryConfig = {
   '일반의료폐기물': { bg: 'thumb-teal', badge: 'badge-teal' },
@@ -254,6 +274,9 @@ onMounted(async () => {
   flex-direction: column;
   gap: 12px;
 }
+.status-filters { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 18px; }
+.filter-chip { padding: 8px 13px; border: 1px solid var(--color-border); border-radius: 999px; background: #fff; color: var(--color-text-secondary); font-size: 12px; font-weight: 700; }
+.filter-chip.active { border-color: var(--color-primary); background: var(--color-primary-light); color: var(--color-primary); }
 
 .enrollment-card {
   display: flex;

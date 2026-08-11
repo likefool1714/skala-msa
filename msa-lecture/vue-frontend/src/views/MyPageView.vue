@@ -10,10 +10,9 @@
           <div class="profile-info">
             <span class="workspace-eyebrow">OPERATIONS DASHBOARD</span>
             <p class="welcome-copy">안녕하세요,</p>
-            <h2 class="profile-name">{{ auth.user?.name || '사용자' }}</h2>
-            <p class="profile-email">{{ auth.user?.email || '-' }}</p>
+            <h2 class="profile-name">{{ auth.user?.organizationName || auth.user?.name || '사용자' }}</h2>
             <span class="badge" :class="isInstructor ? 'badge-amber' : 'badge-blue'">
-              {{ isInstructor ? '수집·운반 업체' : '의료폐기물 배출 사업장' }}
+              {{ isInstructor ? '의료폐기물 수집·운반 업체' : '병원·의원' }}
             </span>
           </div>
         </div>
@@ -137,17 +136,18 @@
             아직 등록한 수거 서비스가 없습니다.
           </p>
 
-          <div class="request-section-head">
+          <div id="carrier-requests" class="request-section-head">
             <div>
-              <h3 class="section-title">수거 신청 처리</h3>
-              <p class="section-subtitle">결제가 완료된 접수를 수락하고, 수거 후 완료 처리하세요.</p>
+              <h3 class="section-title">{{ waitingOnly ? '업체 확인 대기' : '수거 신청 처리' }}</h3>
+              <p class="section-subtitle">{{ waitingOnly ? '새로 들어온 신청만 모아보고 수락·거절하세요.' : '결제가 완료된 접수를 수락하고, 수거 후 완료 처리하세요.' }}</p>
             </div>
+            <router-link v-if="waitingOnly" to="/mypage#carrier-requests" class="action-btn">전체 신청 보기</router-link>
           </div>
 
           <div v-if="carrierRequestsLoading" class="request-loading">수거 신청을 불러오는 중입니다.</div>
           <p v-else-if="carrierRequestsError" class="request-error">{{ carrierRequestsError }}</p>
-          <div v-else-if="carrierRequests.length" class="carrier-request-list">
-            <article v-for="request in carrierRequests" :key="request.id" class="carrier-request-card">
+          <div v-else-if="visibleCarrierRequests.length" class="carrier-request-list">
+            <article v-for="request in visibleCarrierRequests" :key="request.id" class="carrier-request-card">
               <div class="request-card-head">
                 <div>
                   <span class="request-id">신청 #{{ request.id }}</span>
@@ -161,7 +161,7 @@
               <div class="request-detail-grid">
                 <div><span>배출 사업장</span><strong>#{{ request.generatorId }}</strong></div>
                 <div><span>희망 수거일</span><strong>{{ request.preferredCollectionDate || '-' }}</strong></div>
-                <div><span>희망 시간</span><strong>{{ request.preferredStartTime }} ~ {{ request.preferredEndTime }}</strong></div>
+                <div><span>희망 시간</span><strong>{{ formatRequestTime(request) }}</strong></div>
                 <div><span>폐기물 정보</span><strong>{{ request.wasteInformation || '-' }}</strong></div>
               </div>
 
@@ -199,7 +199,7 @@
               </div>
             </article>
           </div>
-          <p v-else class="empty-text">아직 들어온 수거 신청이 없습니다.</p>
+          <p v-else class="empty-text">{{ waitingOnly ? '새로 확인할 신청이 없습니다.' : '아직 들어온 수거 신청이 없습니다.' }}</p>
         </section>
       </main>
     </div>
@@ -207,7 +207,8 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, nextTick, onMounted, watch } from 'vue'
+import { useRoute } from 'vue-router'
 import AppHeader from '@/components/AppHeader.vue'
 import DashboardSidebar from '@/components/DashboardSidebar.vue'
 import CourseCard from '@/components/CourseCard.vue'
@@ -216,6 +217,7 @@ import { enrollmentApi } from '@/api/enrollment.js'
 import { courseApi } from '@/api/course.js'
 
 const auth = useAuthStore()
+const route = useRoute()
 
 const isInstructor = computed(() => auth.user?.role === 'INSTRUCTOR')
 
@@ -244,11 +246,27 @@ const totalEnrollmentCount = computed(() =>
 const waitingRequestCount = computed(() =>
   carrierRequests.value.filter(request => request.status === 'CONFIRMED').length
 )
+const waitingOnly = computed(() => route.query.requestStatus === 'CONFIRMED')
+const visibleCarrierRequests = computed(() => waitingOnly.value
+  ? carrierRequests.value.filter(request => request.status === 'CONFIRMED')
+  : carrierRequests.value
+)
+
+async function focusRequestList() {
+  if (!waitingOnly.value) return
+  await nextTick()
+  document.getElementById('carrier-requests')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+}
 
 function formatPrice(price) {
   const value = Number(price ?? 0)
   if (Number.isNaN(value)) return '-'
   return `${value.toLocaleString()}원`
+}
+
+function formatRequestTime(request) {
+  const nextDay = request.preferredStartTime && request.preferredEndTime && request.preferredEndTime < request.preferredStartTime
+  return `${request.preferredStartTime || '-'} → ${nextDay ? '다음 날 ' : ''}${request.preferredEndTime || '-'}`
 }
 
 function statusLabel(status) {
@@ -427,12 +445,15 @@ onMounted(async () => {
   if (isInstructor.value) {
     recommendLoading.value = false
     await Promise.all([loadInstructorCourses(), loadCarrierRequests()])
+    await focusRequestList()
   } else {
     instructorLoading.value = false
     carrierRequestsLoading.value = false
     await loadStudentRecommendations()
   }
 })
+
+watch(() => route.query.requestStatus, focusRequestList)
 </script>
 
 <style scoped>
