@@ -78,6 +78,7 @@ const waitingCount = ref(0)
 const resultCount = ref(0)
 const waitingSignatures = ref([])
 const resultSignatures = ref([])
+const notificationKey = (type) => `${type}:${auth.user?.id ?? 'anonymous'}`
 
 function readSignatures(key) {
   try {
@@ -89,12 +90,12 @@ function readSignatures(key) {
 }
 
 function markWaitingAsRead() {
-  sessionStorage.setItem('seen_carrier_waiting_requests', JSON.stringify(waitingSignatures.value))
+  sessionStorage.setItem(notificationKey('seen_carrier_waiting_requests'), JSON.stringify(waitingSignatures.value))
   waitingCount.value = 0
 }
 
 function markResultsAsRead() {
-  sessionStorage.setItem('seen_generator_request_results', JSON.stringify(resultSignatures.value))
+  sessionStorage.setItem(notificationKey('seen_generator_request_results'), JSON.stringify(resultSignatures.value))
   resultCount.value = 0
 }
 
@@ -108,13 +109,13 @@ onMounted(async () => {
       waitingSignatures.value = requests
         .filter(item => item.status === 'CONFIRMED')
         .map(item => `${item.id}:${item.status}`)
-      const seen = new Set(readSignatures('seen_carrier_waiting_requests'))
+      const seen = new Set(readSignatures(notificationKey('seen_carrier_waiting_requests')))
       waitingCount.value = waitingSignatures.value.filter(signature => !seen.has(signature)).length
     } else {
       resultSignatures.value = requests
         .filter(item => ['ACCEPTED', 'COMPLETED', 'REJECTED'].includes(item.status))
         .map(item => `${item.id}:${item.status}`)
-      const seen = new Set(readSignatures('seen_generator_request_results'))
+      const seen = new Set(readSignatures(notificationKey('seen_generator_request_results')))
       resultCount.value = resultSignatures.value.filter(signature => !seen.has(signature)).length
     }
   } catch (error) {

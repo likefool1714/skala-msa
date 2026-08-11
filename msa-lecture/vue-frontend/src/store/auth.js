@@ -36,6 +36,7 @@ export const useAuthStore = defineStore('auth', () => {
     } catch (error) {
       console.error('[AuthStore] 사용자 정보 조회 실패:', error)
       logout(false)
+      throw error
     }
   }
 

@@ -239,7 +239,13 @@ async function loadEnrollmentStatus() {
         ? res.data
         : []
 
-    const matched = enrollments.find(item => Number(item.collectionServiceId) === Number(course.value.id))
+    const serviceEnrollments = enrollments
+      .filter(item => Number(item.collectionServiceId) === Number(course.value.id))
+      .sort((a, b) => {
+        const createdAtOrder = new Date(b.createdAt || 0) - new Date(a.createdAt || 0)
+        return createdAtOrder || Number(b.id || 0) - Number(a.id || 0)
+      })
+    const matched = serviceEnrollments.find(item => ['PENDING', 'CONFIRMED', 'ACCEPTED'].includes(item.status))
 
     if (!matched) {
       enrollmentStatus.value = 'NONE'
