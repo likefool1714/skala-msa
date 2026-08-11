@@ -122,8 +122,9 @@ const features = [
   position: relative;
   overflow: hidden;
   background:
-    radial-gradient(circle at 82% 18%, rgba(255,255,255,.9) 0 6%, transparent 6.2%),
-    linear-gradient(135deg, #f7fbfa 0%, #e8f4f1 55%, #eaf3f8 100%);
+    radial-gradient(circle at 84% 16%, rgba(255,255,255,.22) 0 7%, transparent 7.2%),
+    radial-gradient(circle at 72% 78%, rgba(45,206,137,.20), transparent 18rem),
+    linear-gradient(135deg, #172b4d 0%, #5e72e4 52%, #825ee4 100%);
   border-bottom: 1px solid var(--color-border);
   padding: 80px 0 64px;
 }
@@ -139,8 +140,9 @@ const features = [
 .hero-badge {
   display: inline-block;
   padding: 5px 14px;
-  background: var(--color-primary-light);
-  color: var(--color-primary);
+  background: rgba(255,255,255,.14);
+  color: rgba(255,255,255,.92);
+  border: 1px solid rgba(255,255,255,.18);
   border-radius: 20px;
   font-size: 12px;
   font-weight: 600;
@@ -151,13 +153,13 @@ const features = [
   font-weight: 800;
   line-height: 1.25;
   letter-spacing: -0.5px;
-  color: var(--color-text-primary);
+  color: #fff;
   margin-bottom: 16px;
 }
-.hero-title em { color: var(--color-primary); font-style: normal; }
+.hero-title em { color: #9cf0cd; font-style: normal; }
 .hero-desc {
   font-size: 16px;
-  color: var(--color-text-secondary);
+  color: rgba(255,255,255,.76);
   line-height: 1.7;
   max-width: 460px;
   margin-bottom: 28px;
@@ -173,8 +175,8 @@ const features = [
   gap: 36px;
 }
 .stat { display: flex; flex-direction: column; gap: 2px; }
-.stat-num { font-size: 22px; font-weight: 700; color: var(--color-primary); }
-.stat-label { font-size: 12px; color: var(--color-text-secondary); }
+.stat-num { font-size: 22px; font-weight: 700; color: #fff; }
+.stat-label { font-size: 12px; color: rgba(255,255,255,.68); }
 .hero-visual {
   display: flex;
   align-items: center;
@@ -184,9 +186,11 @@ const features = [
   position: relative;
   width: min(420px, 38vw);
   aspect-ratio: 1;
-  border-radius: 48% 52% 44% 56%;
-  background: linear-gradient(145deg, #cfe9e4, #e7f4f1);
-  box-shadow: inset 0 0 0 14px rgba(255,255,255,.42), var(--shadow-lg);
+  border-radius: 34px;
+  background: linear-gradient(145deg, rgba(255,255,255,.22), rgba(255,255,255,.09));
+  border: 1px solid rgba(255,255,255,.26);
+  backdrop-filter: blur(16px);
+  box-shadow: inset 0 0 0 10px rgba(255,255,255,.06), var(--shadow-lg);
 }
 .pet-bubble {
   position: absolute;
@@ -198,7 +202,7 @@ const features = [
 }
 .pet-bubble.dog { width: 170px; height: 170px; left: 44px; top: 84px; border-radius: 45% 55% 50% 50%; font-size: 92px; }
 .pet-bubble.cat { width: 125px; height: 125px; right: 38px; bottom: 62px; border-radius: 50%; font-size: 68px; }
-.scene-heart { position: absolute; right: 54px; top: 42px; color: var(--color-primary); font-size: 42px; transform: rotate(10deg); }
+.scene-heart { position: absolute; right: 54px; top: 42px; color: #9cf0cd; font-size: 42px; transform: rotate(10deg); }
 .scene-paw { position: absolute; opacity: .28; font-size: 30px; }
 .paw-one { left: 34px; bottom: 44px; transform: rotate(-18deg); }
 .paw-two { right: 84px; top: 128px; transform: rotate(22deg); }
@@ -217,7 +221,7 @@ const features = [
 .sitter-card span { color: white; background: var(--color-secondary); border-radius: 50%; padding: 2px 6px; margin-right: 6px; }
 
 /* 강의 섹션 */
-.popular-section { padding: 64px 0; }
+.popular-section { padding: 72px 0; background: #fff; }
 .section-inner { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
 .section-header {
   display: flex;
@@ -241,9 +245,10 @@ const features = [
   border-radius: var(--radius-lg);
   overflow: hidden;
   transition: var(--transition);
+  box-shadow: var(--shadow-sm);
 }
 .course-card-landing:hover {
-  transform: translateY(-3px);
+  transform: translateY(-6px);
   box-shadow: var(--shadow-md);
 }
 .card-thumb {
@@ -254,11 +259,11 @@ const features = [
   justify-content: center;
   overflow: hidden;
 }
-.thumb-teal   { background: linear-gradient(135deg, #e6f4f1, #cfe9e4); }
-.thumb-blue   { background: linear-gradient(135deg, #e7f4ee, #cee8dc); }
-.thumb-purple { background: linear-gradient(135deg, #f2ecfa, #e3d7f2); }
+.thumb-teal   { background: linear-gradient(135deg, #e5fbf2, #c6f3df); }
+.thumb-blue   { background: linear-gradient(135deg, #e7f5ff, #cbdfff); }
+.thumb-purple { background: linear-gradient(135deg, #f1ecff, #dacbff); }
 .thumb-pink   { background: #FBEAF0; }
-.care-emoji { font-size: 72px; filter: drop-shadow(0 8px 12px rgba(84,54,34,.13)); transition: transform .25s ease; }
+.care-emoji { font-size: 72px; filter: drop-shadow(0 10px 18px rgba(50,50,93,.16)); transition: transform .25s ease; }
 .course-card-landing:hover .care-emoji { transform: scale(1.08) rotate(-3deg); }
 .available-label { position: absolute; right: 12px; top: 12px; padding: 4px 9px; border-radius: 20px; background: rgba(255,255,255,.88); color: var(--color-secondary); font-size: 10px; font-weight: 800; }
 .card-body { padding: 14px 16px; display: flex; flex-direction: column; gap: 6px; }
@@ -268,7 +273,7 @@ const features = [
 .price { font-size: 14px; font-weight: 600; color: var(--color-primary); }
 
 /* 특징 */
-.features-section { padding: 72px 0; background: #fff; }
+.features-section { padding: 80px 0; background: var(--color-bg-secondary); }
 .features-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -276,10 +281,11 @@ const features = [
 }
 .feature-card {
   padding: 28px 24px;
-  background: var(--color-bg-secondary);
+  background: #fff;
   border: 1px solid var(--color-border);
   border-radius: var(--radius-lg);
   text-align: left;
+  box-shadow: var(--shadow-sm);
   transition: var(--transition);
 }
 .feature-card:hover { box-shadow: var(--shadow-md); transform: translateY(-2px); }
@@ -290,7 +296,9 @@ const features = [
 /* CTA */
 .cta-section {
   padding: 80px 0;
-  background: linear-gradient(135deg, #4f8f75 0%, #32624f 100%);
+  background:
+    radial-gradient(circle at 15% 50%, rgba(45,206,137,.22), transparent 18rem),
+    linear-gradient(135deg, #172b4d 0%, #5e72e4 55%, #825ee4 100%);
   text-align: center;
 }
 .cta-inner { max-width: 600px; margin: 0 auto; padding: 0 24px; }
@@ -306,7 +314,7 @@ const features = [
 
 /* 푸터 */
 .footer {
-  background: #302821;
+  background: #172b4d;
   padding: 32px 0;
 }
 .footer-inner {

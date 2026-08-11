@@ -3,47 +3,13 @@
     <AppHeader />
 
     <div class="page-layout">
-      <!-- 사이드바 -->
-      <aside class="sidebar">
-        <div class="sidebar-section">
-          <div class="sidebar-label">메뉴</div>
-
-          <router-link
-            to="/courses"
-            class="sidebar-item"
-            :class="{ active: $route.path === '/courses' }"
-          >
-            <span class="si-icon">♻️</span> 수거 서비스
-          </router-link>
-
-          <router-link
-            to="/courses/new"
-            class="sidebar-item"
-            :class="{ active: $route.path === '/courses/new' }"
-          >
-            <span class="si-icon">✍️</span> 수거 서비스 등록
-          </router-link>
-
-          <router-link to="/mypage" class="sidebar-item">
-            <span class="si-icon">⭐</span> 마이페이지
-          </router-link>
-        </div>
-
-        <div class="sidebar-section">
-          <div class="sidebar-label">계정</div>
-          <router-link to="/mypage" class="sidebar-item">
-            <span class="si-icon">👤</span> 마이페이지
-          </router-link>
-          <button class="sidebar-item sidebar-btn" @click="handleLogout">
-            <span class="si-icon">🚪</span> 로그아웃
-          </button>
-        </div>
-      </aside>
+      <DashboardSidebar />
 
       <!-- 메인 -->
       <main class="main-content">
         <div class="content-header">
           <div>
+            <span class="workspace-eyebrow">NEW SERVICE</span>
             <h1 class="page-title">수거 서비스 등록</h1>
             <p class="page-subtitle">수집·운반 업체가 제공할 의료폐기물 수거 서비스를 등록합니다.</p>
           </div>
@@ -136,6 +102,7 @@
 import { reactive, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import AppHeader from '@/components/AppHeader.vue'
+import DashboardSidebar from '@/components/DashboardSidebar.vue'
 import { courseApi } from '@/api/course.js'
 import { useAuthStore } from '@/store/auth.js'
 
@@ -159,11 +126,6 @@ const categoryOptions = [
   { label: '손상성폐기물', value: 'SHARPS' },
   { label: '조직물류폐기물', value: 'PATHOLOGICAL' }
 ]
-
-function handleLogout() {
-  auth.logout()
-  router.push('/')
-}
 
 function validateForm() {
   validationError.value = ''
@@ -256,12 +218,12 @@ async function handleSubmit() {
 }
 
 .page-layout {
-  max-width: 1200px;
+  max-width: 1320px;
   margin: 0 auto;
   padding: 32px 24px;
   display: grid;
-  grid-template-columns: 220px 1fr;
-  gap: 28px;
+  grid-template-columns: 248px 1fr;
+  gap: 32px;
 }
 
 /* 사이드바 */
@@ -334,8 +296,8 @@ async function handleSubmit() {
 }
 
 .page-title {
-  font-size: 22px;
-  font-weight: 700;
+  font-size: 28px;
+  font-weight: 800;
   color: var(--color-text-primary);
 }
 
@@ -349,8 +311,18 @@ async function handleSubmit() {
   background: var(--color-bg-primary);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-lg);
-  padding: 24px;
-  box-shadow: var(--shadow-sm);
+  padding: 32px;
+  box-shadow: var(--shadow-md);
+  position: relative;
+  overflow: hidden;
+}
+
+.form-card::before {
+  content: '';
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 5px;
+  background: linear-gradient(180deg, var(--color-primary), var(--color-accent), var(--color-secondary));
 }
 
 .course-form {
@@ -397,7 +369,7 @@ async function handleSubmit() {
 .form-textarea:focus,
 .form-select:focus {
   border-color: var(--color-primary);
-  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.08);
+  box-shadow: 0 0 0 4px rgba(94,114,228,.10);
 }
 
 .form-textarea {

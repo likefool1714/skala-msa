@@ -2,54 +2,15 @@
   <div class="page-wrapper">
     <AppHeader />
     <div class="page-layout">
-      <!-- 사이드바 -->
-      <aside class="sidebar">
-        <div class="sidebar-section">
-          <div class="sidebar-label">메뉴</div>
-
-          <router-link
-            to="/courses"
-            class="sidebar-item"
-            :class="{ active: $route.path === '/courses' }"
-          >
-            <span class="si-icon">♻️</span> 수거 서비스
-          </router-link>
-
-          <router-link
-            v-if="!isInstructor"
-            to="/enrollments"
-            class="sidebar-item"
-          >
-            <span class="si-icon">✅</span> 수거 신청 관리
-          </router-link>
-
-          <router-link
-            to="/mypage"
-            class="sidebar-item"
-          >
-            <span class="si-icon">⭐</span> 마이페이지
-          </router-link>
-        </div>
-
-        <div class="sidebar-section">
-          <div class="sidebar-label">계정</div>
-          <router-link to="/mypage" class="sidebar-item">
-            <span class="si-icon">👤</span> 마이페이지
-          </router-link>
-          <button class="sidebar-item sidebar-btn" @click="handleLogout">
-            <span class="si-icon">🚪</span> 로그아웃
-          </button>
-        </div>
-      </aside>
+      <DashboardSidebar />
 
       <!-- 메인 -->
       <main class="main-content">
         <div class="content-header">
           <div>
+            <span class="workspace-eyebrow">SERVICE CATALOG</span>
             <h1 class="page-title">의료폐기물 수거 서비스</h1>
-            <p class="page-subtitle" v-if="isInstructor">
-              수집·운반 업체 계정으로 수거 서비스를 등록하고 관리할 수 있습니다.
-            </p>
+            <p class="page-subtitle">{{ isInstructor ? '제공 중인 수거 서비스를 관리하고 새 상품을 등록하세요.' : '폐기물 유형과 조건에 맞는 수거 서비스를 찾아보세요.' }}</p>
           </div>
 
           <router-link
@@ -113,13 +74,12 @@
 
 <script setup>
 import { computed, onMounted } from 'vue'
-import { useRouter } from 'vue-router'
 import AppHeader from '@/components/AppHeader.vue'
+import DashboardSidebar from '@/components/DashboardSidebar.vue'
 import CourseCard from '@/components/CourseCard.vue'
 import { useCourseStore } from '@/store/course.js'
 import { useAuthStore } from '@/store/auth.js'
 
-const router = useRouter()
 const courseStore = useCourseStore()
 const auth = useAuthStore()
 
@@ -138,10 +98,6 @@ function selectCategory(cat) {
   courseStore.setCategory(cat)
 }
 
-function handleLogout() {
-  auth.logout()
-  router.push('/')
-}
 
 onMounted(() => {
   courseStore.fetchCourses()
@@ -155,12 +111,12 @@ onMounted(() => {
 }
 
 .page-layout {
-  max-width: 1200px;
+  max-width: 1320px;
   margin: 0 auto;
   padding: 32px 24px;
   display: grid;
-  grid-template-columns: 220px 1fr;
-  gap: 28px;
+  grid-template-columns: 248px 1fr;
+  gap: 32px;
 }
 
 /* 사이드바 */
@@ -229,7 +185,7 @@ onMounted(() => {
 }
 
 .content-header {
-  margin-bottom: 20px;
+  margin-bottom: 22px;
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
@@ -237,8 +193,8 @@ onMounted(() => {
 }
 
 .page-title {
-  font-size: 22px;
-  font-weight: 700;
+  font-size: 28px;
+  font-weight: 800;
   color: var(--color-text-primary);
 }
 
@@ -258,7 +214,12 @@ onMounted(() => {
   display: flex;
   gap: 8px;
   flex-wrap: wrap;
-  margin-bottom: 24px;
+  margin-bottom: 26px;
+  padding: 10px;
+  border: 1px solid var(--color-border);
+  border-radius: 16px;
+  background: rgba(255,255,255,.78);
+  box-shadow: var(--shadow-sm);
 }
 
 .filter-chip {
@@ -279,7 +240,7 @@ onMounted(() => {
 }
 
 .filter-chip.active {
-  background: var(--color-primary);
+  background: linear-gradient(135deg, var(--color-primary), var(--color-accent));
   color: #fff;
   border-color: var(--color-primary);
 }
@@ -288,7 +249,7 @@ onMounted(() => {
 .course-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 16px;
+  gap: 20px;
 }
 
 /* 스켈레톤 */

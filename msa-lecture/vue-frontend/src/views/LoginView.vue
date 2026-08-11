@@ -137,7 +137,10 @@ async function handleRegister() {
 .login-left {
   position: relative;
   overflow: hidden;
-  background: linear-gradient(155deg, #176b63 0%, #125a54 55%, #0d4541 100%);
+  background:
+    radial-gradient(circle at 18% 76%, rgba(45,206,137,.28), transparent 18rem),
+    radial-gradient(circle at 88% 16%, rgba(255,255,255,.14), transparent 12rem),
+    linear-gradient(155deg, #172b4d 0%, #5e72e4 55%, #825ee4 100%);
   padding: 48px;
   display: flex;
   flex-direction: column;

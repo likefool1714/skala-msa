@@ -2,40 +2,21 @@
   <div class="page-wrapper">
     <AppHeader />
     <div class="page-layout">
-      <aside class="sidebar">
-        <div class="sidebar-section">
-          <div class="sidebar-label">메뉴</div>
-
-          <router-link to="/courses" class="sidebar-item">
-            <span class="si-icon">♻️</span> 수거 서비스
-          </router-link>
-
-          <router-link
-            v-if="!isInstructor"
-            to="/enrollments"
-            class="sidebar-item active"
-          >
-            <span class="si-icon">✅</span> 수거 신청 관리
-          </router-link>
-
-          <router-link to="/mypage" class="sidebar-item">
-            <span class="si-icon">⭐</span> 마이페이지
-          </router-link>
-        </div>
-
-        <div class="sidebar-section">
-          <div class="sidebar-label">계정</div>
-          <router-link to="/mypage" class="sidebar-item">
-            <span class="si-icon">👤</span> 마이페이지
-          </router-link>
-          <button class="sidebar-item sidebar-btn" @click="handleLogout">
-            <span class="si-icon">🚪</span> 로그아웃
-          </button>
-        </div>
-      </aside>
+      <DashboardSidebar />
 
       <main class="main-content">
-        <h1 class="page-title">수거 신청 관리</h1>
+        <div class="content-header">
+          <div>
+            <span class="workspace-eyebrow">COLLECTION TRACKING</span>
+            <h1 class="page-title">수거 신청 관리</h1>
+            <p class="page-subtitle">결제부터 업체 확인, 수거 완료까지 진행 상태를 확인하세요.</p>
+          </div>
+          <div class="status-legend">
+            <span><i class="dot waiting"></i>업체 확인</span>
+            <span><i class="dot accepted"></i>수거 예정</span>
+            <span><i class="dot completed"></i>수거 완료</span>
+          </div>
+        </div>
 
         <div v-if="loading" class="loading-center">
           <div class="spinner"></div>
@@ -88,6 +69,7 @@
 import { ref, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import AppHeader from '@/components/AppHeader.vue'
+import DashboardSidebar from '@/components/DashboardSidebar.vue'
 import { enrollmentApi } from '@/api/enrollment.js'
 import { useAuthStore } from '@/store/auth.js'
 
@@ -144,11 +126,6 @@ function getThumbSrc(course) {
   }
 }
 
-function handleLogout() {
-  auth.logout()
-  router.push('/')
-}
-
 onMounted(async () => {
   // 강사는 이 페이지 접근 불가 → 마이페이지로 이동
   if (isInstructor.value) {
@@ -184,12 +161,12 @@ onMounted(async () => {
 }
 
 .page-layout {
-  max-width: 1200px;
+  max-width: 1320px;
   margin: 0 auto;
   padding: 32px 24px;
   display: grid;
-  grid-template-columns: 220px 1fr;
-  gap: 28px;
+  grid-template-columns: 248px 1fr;
+  gap: 32px;
 }
 
 .sidebar {
@@ -251,11 +228,26 @@ onMounted(async () => {
   min-width: 0;
 }
 
-.page-title {
-  font-size: 22px;
-  font-weight: 700;
+.content-header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 20px;
   margin-bottom: 24px;
 }
+
+.page-title {
+  font-size: 28px;
+  font-weight: 800;
+}
+
+.page-subtitle { margin-top: 6px; color: var(--color-text-muted); font-size: 13px; }
+.status-legend { display: flex; gap: 14px; padding: 10px 14px; border: 1px solid var(--color-border); border-radius: 14px; background: #fff; box-shadow: var(--shadow-sm); }
+.status-legend span { display: flex; align-items: center; gap: 6px; color: var(--color-text-secondary); font-size: 10px; font-weight: 700; }
+.status-legend .dot { width: 7px; height: 7px; border-radius: 50%; }
+.dot.waiting { background: #f5b942; }
+.dot.accepted { background: #5e72e4; }
+.dot.completed { background: #2dce89; }
 
 .enrollment-list {
   display: flex;
@@ -270,12 +262,14 @@ onMounted(async () => {
   background: var(--color-bg-primary);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-lg);
-  padding: 16px;
+  padding: 20px;
   transition: var(--transition);
+  box-shadow: var(--shadow-sm);
 }
 
 .enrollment-card:hover {
-  box-shadow: var(--shadow-sm);
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
 }
 
 .enroll-thumb {

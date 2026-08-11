@@ -48,15 +48,15 @@ function handleLogout() {
   position: sticky;
   top: 0;
   z-index: 100;
-  background: rgba(255,255,255,0.92);
-  backdrop-filter: blur(12px);
+  background: rgba(255,255,255,0.88);
+  backdrop-filter: blur(18px);
   border-bottom: 1px solid var(--color-border);
 }
 .header-inner {
   max-width: 1200px;
   margin: 0 auto;
   padding: 0 24px;
-  height: 64px;
+  height: 72px;
   display: flex;
   align-items: center;
   gap: 32px;
@@ -73,7 +73,9 @@ function handleLogout() {
   display: grid;
   place-items: center;
   border-radius: 13px;
-  background: var(--color-primary-light);
+  background: linear-gradient(135deg, var(--color-primary), var(--color-accent));
+  color: #fff;
+  box-shadow: 0 8px 18px rgba(94,114,228,.25);
   font-size: 21px;
 }
 .logo-text {
@@ -100,6 +102,7 @@ function handleLogout() {
 .nav-link.active {
   color: var(--color-primary);
   background: var(--color-primary-light);
+  box-shadow: inset 0 0 0 1px rgba(94,114,228,.08);
 }
 .header-actions {
   display: flex;
@@ -115,8 +118,8 @@ function handleLogout() {
   width: 34px;
   height: 34px;
   border-radius: 50%;
-  background: var(--color-primary-light);
-  color: var(--color-primary);
+  background: linear-gradient(135deg, var(--color-primary), var(--color-accent));
+  color: #fff;
   font-size: 13px;
   font-weight: 600;
   display: flex;
@@ -126,7 +129,7 @@ function handleLogout() {
   transition: var(--transition);
 }
 .user-avatar:hover {
-  background: var(--color-primary);
-  color: #fff;
+  transform: translateY(-1px);
+  box-shadow: 0 8px 18px rgba(94,114,228,.25);
 }
 </style>

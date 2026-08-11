@@ -304,7 +304,9 @@ watch(
 }
 
 .detail-hero {
-  background: linear-gradient(135deg, #f7fbfa 0%, #e8f4f1 55%, #eaf3f8 100%);
+  background:
+    radial-gradient(circle at 86% 12%, rgba(130,94,228,.10), transparent 18rem),
+    linear-gradient(135deg, #fbfcff 0%, #f1f4ff 55%, #eefaf6 100%);
   border-bottom: 1px solid var(--color-border);
   padding: 48px 0;
 }
@@ -377,9 +379,9 @@ watch(
   padding: 20px;
 }
 
-.thumb-teal { background: linear-gradient(135deg, #e6f4f1, #cfe9e4); }
-.thumb-blue { background: linear-gradient(135deg, #e7f4ee, #cee8dc); }
-.thumb-purple { background: linear-gradient(135deg, #f2ecfa, #e3d7f2); }
+.thumb-teal { background: linear-gradient(135deg, #e5fbf2, #c6f3df); }
+.thumb-blue { background: linear-gradient(135deg, #e7f5ff, #cbdfff); }
+.thumb-purple { background: linear-gradient(135deg, #f1ecff, #dacbff); }
 .thumb-pink { background: #FBEAF0; }
 .thumb-gray { background: #F1EFE8; }
 
@@ -389,7 +391,7 @@ watch(
   flex-direction: column;
   gap: 14px;
 }
-.care-hero-icon { font-size: 78px; filter: drop-shadow(0 10px 12px rgba(84,54,34,.14)); }
+.care-hero-icon { font-size: 78px; filter: drop-shadow(0 12px 18px rgba(50,50,93,.18)); }
 .reservation-heading { display:flex; align-items:flex-end; justify-content:space-between; border-top:1px solid var(--color-border); padding-top:16px; }
 .reservation-heading strong { font-size:15px; }
 .reservation-heading span { font-size:10px; color:var(--color-text-muted); }

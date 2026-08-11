@@ -2,40 +2,14 @@
   <div class="page-wrapper">
     <AppHeader />
     <div class="page-layout">
-      <aside class="sidebar">
-        <div class="sidebar-section">
-          <div class="sidebar-label">메뉴</div>
-
-          <router-link to="/courses" class="sidebar-item">
-            <span class="si-icon">♻️</span> 수거 서비스
-          </router-link>
-
-          <router-link
-            v-if="!isInstructor"
-            to="/enrollments"
-            class="sidebar-item"
-          >
-            <span class="si-icon">✅</span> 수거 신청 관리
-          </router-link>
-
-          <router-link to="/mypage" class="sidebar-item active">
-            <span class="si-icon">⭐</span> 마이페이지
-          </router-link>
-        </div>
-
-        <div class="sidebar-section">
-          <div class="sidebar-label">계정</div>
-          <button class="sidebar-item sidebar-btn" @click="handleLogout">
-            <span class="si-icon">🚪</span> 로그아웃
-          </button>
-        </div>
-      </aside>
+      <DashboardSidebar />
 
       <main class="main-content">
         <!-- 프로필 카드 -->
         <div class="profile-card fade-in-up">
-          <div class="profile-avatar">{{ auth.user?.name?.charAt(0) || '?' }}</div>
           <div class="profile-info">
+            <span class="workspace-eyebrow">OPERATIONS DASHBOARD</span>
+            <p class="welcome-copy">안녕하세요,</p>
             <h2 class="profile-name">{{ auth.user?.name || '사용자' }}</h2>
             <p class="profile-email">{{ auth.user?.email || '-' }}</p>
             <span class="badge" :class="isInstructor ? 'badge-amber' : 'badge-blue'">
@@ -234,14 +208,13 @@
 
 <script setup>
 import { ref, computed, onMounted } from 'vue'
-import { useRouter } from 'vue-router'
 import AppHeader from '@/components/AppHeader.vue'
+import DashboardSidebar from '@/components/DashboardSidebar.vue'
 import CourseCard from '@/components/CourseCard.vue'
 import { useAuthStore } from '@/store/auth.js'
 import { enrollmentApi } from '@/api/enrollment.js'
 import { courseApi } from '@/api/course.js'
 
-const router = useRouter()
 const auth = useAuthStore()
 
 const isInstructor = computed(() => auth.user?.role === 'INSTRUCTOR')
@@ -271,11 +244,6 @@ const totalEnrollmentCount = computed(() =>
 const waitingRequestCount = computed(() =>
   carrierRequests.value.filter(request => request.status === 'CONFIRMED').length
 )
-
-function handleLogout() {
-  auth.logout()
-  router.push('/')
-}
 
 function formatPrice(price) {
   const value = Number(price ?? 0)
@@ -474,12 +442,12 @@ onMounted(async () => {
 }
 
 .page-layout {
-  max-width: 1200px;
+  max-width: 1320px;
   margin: 0 auto;
   padding: 32px 24px;
   display: grid;
-  grid-template-columns: 220px 1fr;
-  gap: 28px;
+  grid-template-columns: 248px 1fr;
+  gap: 32px;
 }
 
 .sidebar {
@@ -548,11 +516,13 @@ onMounted(async () => {
   display: flex;
   align-items: center;
   gap: 20px;
-  background: var(--color-bg-primary);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-lg);
-  padding: 28px;
-  box-shadow: var(--shadow-sm);
+  background:
+    radial-gradient(circle at 88% 25%, rgba(45,206,137,.22), transparent 15rem),
+    linear-gradient(135deg, #172b4d 0%, #5e72e4 58%, #825ee4 100%);
+  border: 1px solid rgba(255,255,255,.14);
+  border-radius: 24px;
+  padding: 32px;
+  box-shadow: var(--shadow-lg);
 }
 
 .profile-avatar {
@@ -575,14 +545,19 @@ onMounted(async () => {
   gap: 4px;
 }
 
+.profile-card .workspace-eyebrow { color: rgba(255,255,255,.72); }
+.profile-card .workspace-eyebrow::before { background: #9cf0cd; }
+.welcome-copy { color: rgba(255,255,255,.68); font-size: 13px; }
+
 .profile-name {
-  font-size: 20px;
-  font-weight: 700;
+  color: #fff;
+  font-size: 28px;
+  font-weight: 800;
 }
 
 .profile-email {
   font-size: 14px;
-  color: var(--color-text-secondary);
+  color: rgba(255,255,255,.66);
 }
 
 .badge {
@@ -690,7 +665,13 @@ onMounted(async () => {
   border-radius: var(--radius-lg);
   padding: 18px 20px;
   box-shadow: var(--shadow-sm);
+  position: relative;
+  overflow: hidden;
 }
+
+.summary-card::after { content: ''; position: absolute; inset: 0 0 auto; height: 3px; background: linear-gradient(90deg, var(--color-primary), var(--color-accent)); }
+.summary-card:nth-child(2)::after { background: linear-gradient(90deg, #11cdef, #5e72e4); }
+.summary-card:nth-child(3)::after { background: linear-gradient(90deg, #f5b942, #fb6340); }
 
 .summary-label {
   font-size: 12px;
